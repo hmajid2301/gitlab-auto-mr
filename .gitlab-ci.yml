@@ -45,11 +45,9 @@ publish-package:production:
 
 publish-docker:
   stage: publish
-  only:
-    - /^release/.*$/
-  image: docker
+  image: python:alpine3.7
   before_script:
-    - apk add python
+    - apk add docker make
     - python setup.py sdist
   script:
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
