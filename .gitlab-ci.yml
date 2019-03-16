@@ -1,18 +1,13 @@
 variables:
   CI_REGISTRY: "registry.gitlab.com"
   PROJECT_REGISTRY: "$CI_REGISTRY/hmajid2301/gitlab-auto-mr"
-  DOCKER_DRIVER: overlay2
-
-image: python:3.6
-
-services:
-  - docker:dind
 
 stages:
   - publish
 
 
 publish-package:production:
+  image: python:3.6
   stage: publish
   only:
     - /^release/.*$/
@@ -29,9 +24,9 @@ publish-package:production:
 
 publish-docker:
   stage: publish
-  image: python:alpine3.7
+  image: docker
   before_script:
-    - apk add docker make
+    - apk add python3-dev
     - python setup.py sdist
   script:
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
