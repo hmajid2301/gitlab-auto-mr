@@ -27,7 +27,7 @@ publish-docker:
   image: docker
   before_script:
     - apk add python3-dev
-    - python setup.py sdist
+    - python3 setup.py sdist
   script:
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
     - docker build -t ${PROJECT_REGISTRY}:latest  .
