@@ -1,8 +1,8 @@
 .. image:: https://gitlab.com/hmajid2301/gitlab-auto-mr/badges/master/pipeline.svg
 
-.. image:: https://img.shields.io/pypi/status/gitlab-auto-mr.svg
+.. image:: https://img.shields.io/pypi/l/gitlab-auto-mr.svg
 
-.. image:: https://img.shields.io/pypi/pyversions/gitlab-auto-mr.svg
+.. image:: https://img.shields.io/pypi/v/gitlab-auto-mr.svg
 
 GitLab Auto MR
 ==============
@@ -34,9 +34,10 @@ First you need to create a personal access token,
 `more information here <https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html>`_.
 With the scope ``api``, so it can create the MR using your API.
 
-``pip install gitlab-auto-mr``
-
 .. code-block::
+
+    pip install gitlab-auto-mr
+    gitlab_auto_mr --help
 
     Usage: gitlab_auto_mr [OPTIONS]
 
@@ -57,9 +58,6 @@ With the scope ``api``, so it can create the MR using your API.
       --squash-commits BOOLEAN  Set to True if you want commits to be squashed.
       --description TEXT        Description in the MR.
       --help                    Show this message and exit.
-
-
-.. code-block::
 
     gitlab_auto_mr --private-token $(private_token) --source-branch feature/test --project-id 5
                    --project-url https://gitlab.com/hmajid2301/stegappasaurus --user-id 5
