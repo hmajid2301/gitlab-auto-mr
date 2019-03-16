@@ -1,0 +1,35 @@
+image: python:3.6
+
+stages:
+  - publish:test
+  - publish:package
+
+
+publish_package:staging:
+  stage: publish:test
+  only:
+    - master
+  variables:
+    TWINE_USERNAME: $PYPI_STAGING_USERNAME
+    TWINE_PASSWORD: $PYPI_STAGING_PASSWORD
+  before_script:
+    - pip install twine
+    - python setup.py sdist
+    - python setup.py check --restructuredtext
+  script:
+    - twine upload --repository-url https://test.pypi.org/legacy/ dist/*
+
+
+publish_package:production:
+  stage: publish:package
+  only:
+    - /^release/.*$/
+  variables:
+    TWINE_USERNAME: $PYPI_PRODUCTION_USERNAME
+    TWINE_PASSWORD: $PYPI_PRODUCTION_PASSWORD
+  before_script:
+    - pip install twine
+    - python setup.py sdist
+    - python setup.py check --restructuredtext
+  script:
+    - twine upload dist/*

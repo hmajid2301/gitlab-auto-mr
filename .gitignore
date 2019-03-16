@@ -1,0 +1,7 @@
+.vscode/
+.idea/
+.history/
+.venv/
+*.egg-info
+*.tar.gz
+dist/*
