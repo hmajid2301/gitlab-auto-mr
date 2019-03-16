@@ -60,7 +60,7 @@ Args:
               help="The target branch to merge onto.")
 @click.option('--commit-prefix', envvar='COMMIT_PREFIX', default="WIP",
               help="Prefix for the MR title i.e. WIP.")
-@click.option('--remove-branch', envvar='REMOVE_BRANCH', type=bool, default=False,
+@click.option('--remove-branch', envvar='REMOVE_BRANCH_AFTER_MERGE', type=bool, default=False,
               help="Set to True if you want the source branch to be removed after MR.")
 @click.option('--squash-commits', envvar='SQUASH', type=bool, default=False,
               help="Set to True if you want commits to be squashed.")
