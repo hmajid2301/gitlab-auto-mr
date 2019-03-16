@@ -90,6 +90,8 @@ def cli(private_token, source_branch, project_id, project_url, user_id, target_b
         }
         make_api_call(method="post", url=f"{url}/merge_requests", headers=headers, data=data)
         print(f"Created a new MR {commit_title}, assigned to you.")
+    except ValueError:
+        sys.exit(0)
     except SystemError:
         sys.exit(1)
 
@@ -139,7 +141,7 @@ def check_if_mr_exists(response, source_branch):
     source_branch_mr = [mr for mr in response if mr["source_branch"] == source_branch]
     if source_branch_mr:
         print(f"no new merge request opened, one already exists for this branch {source_branch}.")
-        raise SystemError
+        raise ValueError
 
 
 def get_mr_title(commit_prefix, source_branch):
