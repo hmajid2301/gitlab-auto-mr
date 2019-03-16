@@ -2,7 +2,7 @@ from setuptools import find_packages
 from setuptools import setup
 
 setup(name='gitlab-auto-mr',
-      version='0.1.1.post4',
+      version='0.1.2',
       description='A simple tool for automatically creating merge requests in GitLab',
       long_description=open("README.rst").read(),
       author='Haseeb Majid',

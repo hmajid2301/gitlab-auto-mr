@@ -80,7 +80,7 @@ Add the following to your ``.gitlab-ci.yml`` file:
       - open
 
     open_merge_request:
-      image: registry.gitlab.com/hmajid2301/gitlab-auto-merge-request
+      image: registry.gitlab.com/hmajid2301/gitlab-auto-mr
       before_script: [] # We do not need any setup work, let's remove the global one (if any)
       variables:
         GIT_STRATEGY: none # We do not need a clone of the GIT repository to create a Merge Request
