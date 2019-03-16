@@ -9,23 +9,7 @@ services:
   - docker:dind
 
 stages:
-  - test
   - publish
-
-
-publish-package:test:
-  stage: test
-  only:
-    - master
-  variables:
-    TWINE_USERNAME: $PYPI_STAGING_USERNAME
-    TWINE_PASSWORD: $PYPI_STAGING_PASSWORD
-  before_script:
-    - pip install twine
-    - python setup.py sdist
-  script:
-    - twine check dist/*
-    - twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
 
 publish-package:production:
