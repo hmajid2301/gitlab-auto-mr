@@ -1,12 +1,20 @@
+variables:
+  CI_REGISTRY: "registry.gitlab.com"
+  PROJECT_REGISTRY: "$CI_REGISTRY/hmajid2301/gitlab-auto-mr"
+  DOCKER_DRIVER: overlay2
+
 image: python:3.6
 
+services:
+  - docker:dind
+
 stages:
-  - publish:test
-  - publish:package
+  - test
+  - publish
 
 
-publish_package:staging:
-  stage: publish:test
+publish-package:test:
+  stage: test
   only:
     - master
   variables:
@@ -15,13 +23,13 @@ publish_package:staging:
   before_script:
     - pip install twine
     - python setup.py sdist
-    - python setup.py check --restructuredtext
   script:
+    - twine check dist/*
     - twine upload --repository-url https://test.pypi.org/legacy/ dist/*
 
 
-publish_package:production:
-  stage: publish:package
+publish-package:production:
+  stage: publish
   only:
     - /^release/.*$/
   variables:
@@ -30,6 +38,22 @@ publish_package:production:
   before_script:
     - pip install twine
     - python setup.py sdist
-    - python setup.py check --restructuredtext
   script:
+    - twine check dist/*
     - twine upload dist/*
+
+
+publish-docker:
+  stage: publish
+  only:
+    - /^release/.*$/
+  image: docker
+  before_script:
+    - apk add python
+    - python setup.py sdist
+  script:
+    - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
+    - docker build -t ${PROJECT_REGISTRY}:latest  .
+    - docker push ${PROJECT_REGISTRY}:latest
+
+
