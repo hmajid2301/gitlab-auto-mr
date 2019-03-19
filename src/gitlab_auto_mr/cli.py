@@ -67,7 +67,7 @@ Args:
 @click.option('--description', envvar='DESCRIPTION',
               help="Description in the MR.")
 @click.option('--use-issue', envvar='USE_ISSUE', type=bool, default=False,
-              help="Set to True, if you want to use issue in branch name.")
+              help="Set to True, if the issue id is in branch name the MR will use data from the issue.")
 def cli(private_token, source_branch, project_id, project_url, user_id, target_branch, commit_prefix, remove_branch,
         squash_commits, description, use_issue):
     try:
