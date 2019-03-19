@@ -66,8 +66,10 @@ Args:
               help="Set to True if you want commits to be squashed.")
 @click.option('--description', envvar='DESCRIPTION',
               help="Description in the MR.")
+@click.option('--use-issue', envvar='USE_ISSUE', type=bool, default=False,
+              help="Set to True, if you want to use issue in branch name.")
 def cli(private_token, source_branch, project_id, project_url, user_id, target_branch, commit_prefix, remove_branch,
-        squash_commits, description):
+        squash_commits, description, use_issue):
     try:
         url = get_api_url(project_id, project_url)
         commit_title = get_mr_title(commit_prefix, source_branch)
