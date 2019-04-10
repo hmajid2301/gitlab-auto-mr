@@ -96,8 +96,7 @@ You can set extra variables like so.
 - AUTO_MERGE: Will auto merge request after being reviewed and CI passes
 - TARGET_BRANCH: The target branch for the MR
 - DESCRIPTION: Description of the MR
-- USE_ISSUE_NAME: If set to True will use information from issue in branch name, must be in the form #issue-number,
-i.e feature/#6.
+- USE_ISSUE_NAME: If set to True will use information from issue in branch name, must be in the form #issue-number, i.e feature/#6.
 
 Authors
 =======
