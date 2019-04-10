@@ -7,22 +7,13 @@
 GitLab Auto MR
 ==============
 
-This script is meant to be used in GitLab CI to automatically open Merge
-Requests for feature branches, if there is none yet. This project
-provides a docker image you can use for ease of use, but also a Python
-library.
-
-It is based on the script and idea of `Riccardo Padovani <https://rpadovani.com>`_,
-which he introduced with his blog post
-`How to automatically create new MR on Gitlab with Gitlab CI <https://rpadovani.com/open-mr-gitlab-ci>`_.
-
 This is a simple Python script that allows you create MR in GitLab automatically. It is intended to be used in CI/CD
 as a Docker image. However you can use it as a separate Python library if you would like.
 An example CI using this can be found `here <https://gitlab.com/hmajid2301/stegappasaurus/blob/master/.gitlab-ci.yml>`_.
 
-It is based on the script and idea of `Riccardo Padovani <https://rpadovani.com>`_, which he introduced with his blog post
+It is based on the script and idea of `Riccardo Padovani <https://rpadovani.com>`_,
+which he introduced with his blog post
 `How to automatically create new MR on Gitlab with Gitlab CI <https://rpadovani.com/open-mr-gitlab-ci>`_.
-Thanks for providing this.
 
 This package was intended to be used by GitLab CI hence using environments provided by the GitLab CI. You can however
 use it as a CLI tool if you would like.
@@ -59,8 +50,8 @@ With the scope ``api``, so it can create the MR using your API.
       --description TEXT        Description in the MR.
       --help                    Show this message and exit.
 
-    gitlab_auto_mr --private-token $(private_token) --source-branch feature/test --project-id 5
-                   --project-url https://gitlab.com/hmajid2301/stegappasaurus --user-id 5
+    gitlab_auto_mr --private-token $(private_token) --source-branch feature/test --project-id 5 \
+                    --project-url https://gitlab.com/hmajid2301/stegappasaurus --user-id 5
 
 GitLab CI
 *********
@@ -85,7 +76,7 @@ Add the following to your ``.gitlab-ci.yml`` file:
       stage: open
       only:
         - /^feature\/*/ # We have a very strict naming convention
-       script:
+      script:
         - gitlab_auto_mr
 
 You can set extra variables like so.
@@ -102,7 +93,16 @@ You can set extra variables like so.
 - AUTO_MERGE: Will auto merge request after being reviewed and CI
   passes
 - TARGET_BRANCH: The target branch for the MR
-- DESCRIPTION: Description of the Mr
+- DESCRIPTION: Description of the MR
+- USE_ISSUE_NAME: If set to True
+
+
+Development Environment
+***********************
+
+.. code-block::
+
+    pip install -r requirements
 
 Authors
 =======
