@@ -53,6 +53,7 @@ Options:
                             i.e feature/#6.
   --help                    Show this message and exit.
 
+.. code-block::
 
     gitlab_auto_mr --private-token $(private_token) --source-branch feature/test --project-id 5 \
                     --project-url https://gitlab.com/hmajid2301/stegappasaurus --user-id 5
