@@ -46,28 +46,82 @@ Args:
 
 
 @click.command()
-@click.option('--private-token', envvar='GITLAB_PRIVATE_TOKEN', required=True,
-              help="Private GITLAB token, used to authenticate when calling the MR API.")
-@click.option('--source-branch', envvar='CI_COMMIT_REF_NAME', required=True,
-              help="The source branch to merge into.")
-@click.option('--project-id', envvar='CI_PROJECT_ID', required=True, type=int,
-              help="The project ID on GitLab to create the MR for.")
-@click.option('--project-url', envvar='CI_PROJECT_URL', required=True,
-              help="The project URL on GitLab to create the MR for.")
-@click.option('--user-id', envvar='GITLAB_USER_ID', required=True, type=int,
-              help="The GitLab user ID to assign the created MR to.")
-@click.option('--target-branch', envvar='TARGET_BRANCH',
-              help="The target branch to merge onto.")
-@click.option('--commit-prefix', envvar='COMMIT_PREFIX', default="WIP",
-              help="Prefix for the MR title i.e. WIP.")
-@click.option('--remove-branch', envvar='REMOVE_BRANCH_AFTER_MERGE', type=bool, default=False,
-              help="Set to True if you want the source branch to be removed after MR.")
-@click.option('--squash-commits', envvar='SQUASH', type=bool, default=False,
-              help="Set to True if you want commits to be squashed.")
-@click.option('--description', envvar='DESCRIPTION',
-              help="Description in the MR.")
-def cli(private_token, source_branch, project_id, project_url, user_id, target_branch, commit_prefix, remove_branch,
-        squash_commits, description):
+@click.option(
+    "--private-token",
+    envvar="GITLAB_PRIVATE_TOKEN",
+    required=True,
+    help="Private GITLAB token, used to authenticate when calling the MR API.",
+)
+@click.option(
+    "--source-branch",
+    envvar="CI_COMMIT_REF_NAME",
+    required=True,
+    help="The source branch to merge into.",
+)
+@click.option(
+    "--project-id",
+    envvar="CI_PROJECT_ID",
+    required=True,
+    type=int,
+    help="The project ID on GitLab to create the MR for.",
+)
+@click.option(
+    "--project-url",
+    envvar="CI_PROJECT_URL",
+    required=True,
+    help="The project URL on GitLab to create the MR for.",
+)
+@click.option(
+    "--user-id",
+    envvar="GITLAB_USER_ID",
+    required=True,
+    type=int,
+    help="The GitLab user ID to assign the created MR to.",
+)
+@click.option(
+    "--target-branch", envvar="TARGET_BRANCH", help="The target branch to merge onto."
+)
+@click.option(
+    "--commit-prefix",
+    envvar="COMMIT_PREFIX",
+    default="WIP",
+    help="Prefix for the MR title i.e. WIP.",
+)
+@click.option(
+    "--remove-branch",
+    envvar="REMOVE_BRANCH_AFTER_MERGE",
+    type=bool,
+    default=False,
+    help="Set to True if you want the source branch to be removed after MR.",
+)
+@click.option(
+    "--squash-commits",
+    envvar="SQUASH",
+    type=bool,
+    default=False,
+    help="Set to True if you want commits to be squashed.",
+)
+@click.option("--description", envvar="DESCRIPTION", help="Description in the MR.")
+@click.option(
+    "--use-issue-name",
+    envvar="USE_ISSUE_NAME",
+    type=bool,
+    default=False,
+    help="If set to True will use information from issue in branch name, must be in the form #issue-number, i.e feature/#6.",
+)
+def cli(
+    private_token,
+    source_branch,
+    project_id,
+    project_url,
+    user_id,
+    target_branch,
+    commit_prefix,
+    remove_branch,
+    squash_commits,
+    description,
+    use_issue_name,
+):
     try:
         url = get_api_url(project_id, project_url)
         commit_title = get_mr_title(commit_prefix, source_branch)
@@ -88,7 +142,24 @@ def cli(private_token, source_branch, project_id, project_url, user_id, target_b
             "assignee_id": user_id,
             "description": description,
         }
-        make_api_call(method="post", url=f"{url}/merge_requests", headers=headers, data=data)
+
+        if use_issue_name:
+            try:
+                issue_id = re.search("#[0-9]+", source_branch).group(0)
+            except IndexError:
+                print(f"Issue Number not found in branch name {source_branch}")
+                sys.exit(1)
+
+            response = make_api_call(f"{url}/issues/{issue_id[1:]}", headers=headers)
+            extra_data = {
+                "milestone_id": response["milestone"]["id"],
+                "labels": response["labels"],
+            }
+            data = {**data, **extra_data}
+
+        make_api_call(
+            method="post", url=f"{url}/merge_requests", headers=headers, data=data
+        )
         print(f"Created a new MR {commit_title}, assigned to you.")
     except ValueError:
         sys.exit(0)
@@ -140,7 +211,9 @@ def check_if_mr_exists(response, source_branch):
     """
     source_branch_mr = [mr for mr in response if mr["source_branch"] == source_branch]
     if source_branch_mr:
-        print(f"no new merge request opened, one already exists for this branch {source_branch}.")
+        print(
+            f"no new merge request opened, one already exists for this branch {source_branch}."
+        )
         raise ValueError
 
 
@@ -177,7 +250,7 @@ def get_target_branch(headers, target_branch, url):
     """
     if not target_branch:
         response = make_api_call(url=url, headers=headers)
-        target_branch = response['default_branch']
+        target_branch = response["default_branch"]
     return target_branch
 
 
@@ -208,6 +281,3 @@ def make_api_call(url, method="get", headers=None, data=None):
 
     print(f"API request failed to {url}")
     raise SystemError
-
-
-

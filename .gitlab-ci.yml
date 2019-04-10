@@ -7,12 +7,18 @@ services:
   - docker:dind
 
 stages:
+  - test
   - publish
 
+lint:black:
+  stage: test
+  image: milansuk/python-black:latest
+  script:
+    - black --check src/
 
 publish-package:production:
-  image: python:3.6
   stage: publish
+  image: python:3.6
   only:
     - /^release/.*$/
   variables:
@@ -25,7 +31,6 @@ publish-package:production:
     - twine check dist/*
     - twine upload dist/*
 
-
 publish-docker:
   stage: publish
   image: docker
@@ -36,5 +41,3 @@ publish-docker:
     - docker login ${CI_REGISTRY} -u gitlab-ci-token -p ${CI_BUILD_TOKEN}
     - docker build -t ${PROJECT_REGISTRY}:latest  .
     - docker push ${PROJECT_REGISTRY}:latest
-
-

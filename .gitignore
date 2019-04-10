@@ -5,3 +5,5 @@
 *.egg-info
 *.tar.gz
 dist/*
+__pycache__/
+*.pyc
