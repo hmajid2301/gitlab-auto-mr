@@ -132,15 +132,6 @@ def cli(
         response = make_api_call(f"{url}/merge_requests?state_opened", headers=headers)
         check_if_mr_exists(response, source_branch)
 
-        if use_issue_name:
-            try:
-                issue_id = re.search("#[0-9]+", source_branch).group(0)
-            except IndexError:
-                print(f"Issue Number not found in branch name {source_branch}")
-                sys.exit(1)
-
-            response = make_api_call(f"{url}/issues/{issue_id}", headers=headers)
-
         data = {
             "id": project_id,
             "source_branch": source_branch,
@@ -151,6 +142,21 @@ def cli(
             "assignee_id": user_id,
             "description": description,
         }
+
+        if use_issue_name:
+            try:
+                issue_id = re.search("#[0-9]+", source_branch).group(0)
+            except IndexError:
+                print(f"Issue Number not found in branch name {source_branch}")
+                sys.exit(1)
+
+            response = make_api_call(f"{url}/issues/{issue_id[1:]}", headers=headers)
+            extra_data = {
+                "milestone_id": response["milestone"]["id"],
+                "labels": response["labels"],
+            }
+            data = {**data, **extra_data}
+
         make_api_call(
             method="post", url=f"{url}/merge_requests", headers=headers, data=data
         )
