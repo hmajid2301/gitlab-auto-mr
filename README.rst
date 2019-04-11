@@ -100,6 +100,68 @@ You can set extra variables like so.
 - DESCRIPTION: Description of the MR
 - USE_ISSUE_NAME: If set to True will use information from issue in branch name, must be in the form #issue-number, i.e feature/#6.
 
+Changelog
+=========
+
+All notable changes to this project will be documented in this file.
+
+The format is based on `Keep a Changelog`_, and this project adheres to
+`Semantic Versioning`_.
+
+[0.2.2post1] - 2019-04-101
+--------------------
+Added
+*****
+-  Updated a README with a Changelog
+
+[0.2.2] - 2019-04-10
+--------------------
+Fixed
+*****
+-  Formatting error in README
+
+[0.2.1] - 2019-04-10
+--------------------
+Fixed
+*****
+-  Formatting error in README
+
+[0.2.0] - 2019-04-10
+--------------------
+Added
+*****
+-  Using black as code formatter
+-  Added new argument, ``--use-issue-name`` which is adds settings from
+   issue such as labels to the MR.
+
+[0.1.4] - 2019-03-16
+--------------------
+Changed
+*******
+-  Updated README with new badges and better installation instructions.
+
+[0.1.3] - 2019-03-16
+--------------------
+Fixed
+*****
+-  Exit with 0 value if MR already exists.
+
+[0.1.2] - 2019-03-16
+--------------------
+Fixed
+*****
+-  Documentation using ``gitlab-auto-merge-request`` instead of
+   ``gitlab-auto-mr``.
+
+[0.1.0] - 2019-03-16
+--------------------
+Added
+*****
+-  Initial Release.
+
+.. _Keep a Changelog: https://keepachangelog.com/en/1.0.0/
+.. _Semantic Versioning: https://semver.org/spec/v2.0.0.html
+
 Authors
 =======
 
