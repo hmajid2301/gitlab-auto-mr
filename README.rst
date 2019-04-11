@@ -108,8 +108,8 @@ All notable changes to this project will be documented in this file.
 The format is based on `Keep a Changelog`_, and this project adheres to
 `Semantic Versioning`_.
 
-[0.2.2post1] - 2019-04-11
--------------------------
+[0.2.2post1] - 2019-04-101
+--------------------
 Added
 *****
 -  Updated a README with a Changelog
