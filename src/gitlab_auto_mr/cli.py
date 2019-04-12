@@ -9,10 +9,10 @@ Example:
 
         $ pip install -e .
         $ gitlab_auto_mr --private-token xxx --source-branch feature --project-id 11121006 \
-                         --project-url https://gitlab.com/hmajid2301 --user-id 2902137
+                            --project-url https://gitlab.com/hmajid2301 --user-id 2902137
 
 .. _Google Python Style Guide:
-   http://google.github.io/styleguide/pyguide.html
+    http://google.github.io/styleguide/pyguide.html
 
 """
 
@@ -52,12 +52,7 @@ Args:
     required=True,
     help="Private GITLAB token, used to authenticate when calling the MR API.",
 )
-@click.option(
-    "--source-branch",
-    envvar="CI_COMMIT_REF_NAME",
-    required=True,
-    help="The source branch to merge into.",
-)
+@click.option("--source-branch", envvar="CI_COMMIT_REF_NAME", required=True, help="The source branch to merge into.")
 @click.option(
     "--project-id",
     envvar="CI_PROJECT_ID",
@@ -66,10 +61,7 @@ Args:
     help="The project ID on GitLab to create the MR for.",
 )
 @click.option(
-    "--project-url",
-    envvar="CI_PROJECT_URL",
-    required=True,
-    help="The project URL on GitLab to create the MR for.",
+    "--project-url", envvar="CI_PROJECT_URL", required=True, help="The project URL on GitLab to create the MR for."
 )
 @click.option(
     "--user-id",
@@ -78,15 +70,8 @@ Args:
     type=int,
     help="The GitLab user ID to assign the created MR to.",
 )
-@click.option(
-    "--target-branch", envvar="TARGET_BRANCH", help="The target branch to merge onto."
-)
-@click.option(
-    "--commit-prefix",
-    envvar="COMMIT_PREFIX",
-    default="WIP",
-    help="Prefix for the MR title i.e. WIP.",
-)
+@click.option("--target-branch", envvar="TARGET_BRANCH", help="The target branch to merge onto.")
+@click.option("--commit-prefix", envvar="COMMIT_PREFIX", default="WIP", help="Prefix for the MR title i.e. WIP.")
 @click.option(
     "--remove-branch",
     envvar="REMOVE_BRANCH_AFTER_MERGE",
@@ -151,15 +136,10 @@ def cli(
                 sys.exit(1)
 
             response = make_api_call(f"{url}/issues/{issue_id[1:]}", headers=headers)
-            extra_data = {
-                "milestone_id": response["milestone"]["id"],
-                "labels": response["labels"],
-            }
+            extra_data = {"milestone_id": response["milestone"]["id"], "labels": response["labels"]}
             data = {**data, **extra_data}
 
-        make_api_call(
-            method="post", url=f"{url}/merge_requests", headers=headers, data=data
-        )
+        make_api_call(method="post", url=f"{url}/merge_requests", headers=headers, data=data)
         print(f"Created a new MR {commit_title}, assigned to you.")
     except ValueError:
         sys.exit(0)
@@ -211,9 +191,7 @@ def check_if_mr_exists(response, source_branch):
     """
     source_branch_mr = [mr for mr in response if mr["source_branch"] == source_branch]
     if source_branch_mr:
-        print(
-            f"no new merge request opened, one already exists for this branch {source_branch}."
-        )
+        print(f"no new merge request opened, one already exists for this branch {source_branch}.")
         raise ValueError
 
 
