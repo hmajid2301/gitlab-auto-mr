@@ -1,3 +1,5 @@
+image: python:3.6
+
 variables:
   CI_REGISTRY: "registry.gitlab.com"
   PROJECT_REGISTRY: "$CI_REGISTRY/hmajid2301/gitlab-auto-mr"
@@ -13,21 +15,20 @@ stages:
 
 test:linter:
   stage: test
-  image: alpine/flake8
   script:
-    - flake8 src/
+    - pip install tox
+    - tox -e lint
 
 
 test:code-formatter:
   stage: test
-  image: milansuk/python-black:latest
   script:
-    - black --check src/
+    - pip install tox
+    - tox -e code-formatter-check
 
 
 publish-package:production:
   stage: publish
-  image: python:3.6
   only:
     - /^release/.*$/
   variables:

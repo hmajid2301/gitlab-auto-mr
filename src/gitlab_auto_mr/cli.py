@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""This module is used to use the GitLab API to automatically create a MR for a specific project, assigned to you.
+r"""This module is used to use the GitLab API to automatically create a MR for a specific project, assigned to you.
 This Python library is intended to be used by in a Docker image in the GitLab CI. Hences lots of the cli options can
 also be environment variables, most of which will be provided with the GitLab CI. However this package allows you
 to do this using the CLI if you so wish.
@@ -15,34 +15,11 @@ Example:
     http://google.github.io/styleguide/pyguide.html
 
 """
-
 import re
 import sys
 
-import requests
 import click
-
-
-"""Acts as the main function is called by when you use `gitlab_auto_mr`.
-
-* It checks if the source branch is the target branch
-* It checks if the MR already exists for that target onto the source
-* It then creates the MR
-* Finally it updates the MR which extra attributes i.e. Squash commits or Auto Merge etc.
-
-Args:
-    private_token (str): Private GITLAB token, used to authenticate when calling the MR API.
-    source_branch (str): The source branch to merge into..
-    project_id (int): The project ID on GitLab to create the MR for.
-    project_url (str): The project URL on GitLab to create the MR for.
-    user_id (int): The GitLab user ID to assign the created MR to.
-    target_branch (str): The target branch to merge onto, i.e. master.
-    commit_prefix (str): Prefix for the MR title i.e. WIP.
-    remove_branch (bool): Set to True if you want the source branch to be removed after MR
-    squash_commits (bool): Set to True if you want commits to be squashed.
-    description (str): Description in the MR.
-
-"""
+import requests
 
 
 @click.command()
@@ -107,6 +84,26 @@ def cli(
     description,
     use_issue_name,
 ):
+    """Acts as the main function is called by when you use `gitlab_auto_mr`.
+
+    * It checks if the source branch is the target branch
+    * It checks if the MR already exists for that target onto the source
+    * It then creates the MR
+    * Finally it updates the MR which extra attributes i.e. Squash commits or Auto Merge etc.
+
+    Args:
+        private_token (str): Private GITLAB token, used to authenticate when calling the MR API.
+        source_branch (str): The source branch to merge into..
+        project_id (int): The project ID on GitLab to create the MR for.
+        project_url (str): The project URL on GitLab to create the MR for.
+        user_id (int): The GitLab user ID to assign the created MR to.
+        target_branch (str): The target branch to merge onto, i.e. master.
+        commit_prefix (str): Prefix for the MR title i.e. WIP.
+        remove_branch (bool): Set to True if you want the source branch to be removed after MR
+        squash_commits (bool): Set to True if you want commits to be squashed.
+        description (str): Description in the MR.
+
+    """
     try:
         url = get_api_url(project_id, project_url)
         commit_title = get_mr_title(commit_prefix, source_branch)
@@ -233,8 +230,7 @@ def get_target_branch(headers, target_branch, url):
 
 
 def make_api_call(url, method="get", headers=None, data=None):
-    """If target branch isn't specified find the default branch and use it as the target branch will typically be
-    master.
+    """Makes API call to GitLab.
 
     Args:
         url (str): The url to make the API request to.
@@ -247,6 +243,7 @@ def make_api_call(url, method="get", headers=None, data=None):
 
     Raises:
         SystemError: If the API request failed.
+
     """
     try:
         response = requests.request(method, url=url, headers=headers, json=data)
