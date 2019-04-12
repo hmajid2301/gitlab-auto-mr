@@ -11,7 +11,6 @@ Click==7.0
 docutils==0.14
 entrypoints==0.3
 flake8==3.7.7
--e git+git@gitlab.com:hmajid2301/gitlab-auto-mr.git@754f37e4caa9942e9204257a5f2fd94e0d00c709#egg=gitlab_auto_mr
 idna==2.8
 imagesize==1.1.0
 isort==4.3.17
