@@ -1,10 +1,18 @@
 .. image:: https://gitlab.com/hmajid2301/gitlab-auto-mr/badges/master/pipeline.svg
+:target: https://gitlab.com/hmajid2301/gitlab-auto-mr
+:alt: Pipeline Status
 
 .. image:: https://img.shields.io/pypi/l/gitlab-auto-mr.svg
+:target: https://pypi.org/project/gitlab-auto-mr/
+:alt: PyPI Project License
 
 .. image:: https://img.shields.io/pypi/v/gitlab-auto-mr.svg
+:target: https://pypi.org/project/gitlab-auto-mr/
+:alt: PyPI Project Version
 
 .. image:: https://readthedocs.org/projects/gitlab-auto-mr/badge/?version=latest
+:target: https://gitlab-auto-mr.readthedocs.io/en/latest/?badge=latest
+:alt: Documentation Status
 
 GitLab Auto MR
 ==============
@@ -107,6 +115,12 @@ Changelog
 
 The format is based on `Keep a Changelog`_, and this project adheres to
 `Semantic Versioning`_.
+
+[0.2.4] - 2019-04-12
+--------------------
+Fixed
+*******
+- README badges include links
 
 [0.2.3] - 2019-04-12
 --------------------
