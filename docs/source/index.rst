@@ -10,8 +10,8 @@ Welcome to gitlab-auto-mr's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-.. include:: ../../README.rst
 .. include:: modules.rst
+.. include:: ../../README.rst
 
 
 Indices and tables
