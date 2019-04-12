@@ -23,7 +23,7 @@ copyright = "2019, Haseeb majid"
 author = "Haseeb Majid"
 
 # The full version, including alpha/beta/rc tags
-release = "0.2.5"
+release = "0.2.6"
 
 
 # -- General configuration ---------------------------------------------------
@@ -31,7 +31,8 @@ release = "0.2.5"
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = ["sphinx.ext.autodoc", "sphinx.ext.napoleon"]
+extensions = ["sphinx.ext.autodoc", "sphinx.ext.napoleon", "m2r"]
+source_suffix = [".rst", ".md"]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]

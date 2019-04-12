@@ -12,6 +12,7 @@ Welcome to gitlab-auto-mr's documentation!
 
 .. include:: modules.rst
 .. include:: ../../README.rst
+.. mdinclude:: ../../changelog.md
 
 
 Indices and tables
