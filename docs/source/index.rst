@@ -10,9 +10,6 @@ Welcome to gitlab-auto-mr's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-README File
-===========
-
 .. include:: ../../README.rst
 .. include:: modules.rst
 

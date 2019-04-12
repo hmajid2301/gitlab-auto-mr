@@ -106,8 +106,8 @@ Changelog
 The format is based on `Keep a Changelog`_, and this project adheres to
 `Semantic Versioning`_.
 
-[0.2.2post1] - 2019-04-101
---------------------
+[0.2.2post1] - 2019-04-11
+-------------------------
 Added
 *****
 -  Updated a README with a Changelog
@@ -160,8 +160,8 @@ Added
 .. _Keep a Changelog: https://keepachangelog.com/en/1.0.0/
 .. _Semantic Versioning: https://semver.org/spec/v2.0.0.html
 
-Authors
-=======
+Appendix
+========
 
 - Extra features: `Allsimon <https://gitlab.com/Allsimon/gitlab-auto-merge-request>`_
 - Forked from: `Tobias L. Maier <https://gitlab.com/tmaier/gitlab-auto-merge-request>`_
