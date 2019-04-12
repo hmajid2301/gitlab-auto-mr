@@ -4,6 +4,8 @@
 
 .. image:: https://img.shields.io/pypi/v/gitlab-auto-mr.svg
 
+.. image:: https://readthedocs.org/projects/gitlab-auto-mr/badge/?version=latest
+
 GitLab Auto MR
 ==============
 
