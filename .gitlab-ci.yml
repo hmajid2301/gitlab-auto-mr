@@ -10,11 +10,20 @@ stages:
   - test
   - publish
 
+
+lint:flake8:
+  stage: test
+  image: alpine/flake8
+  script:
+    - flake8 src/
+
+
 lint:black:
   stage: test
   image: milansuk/python-black:latest
   script:
     - black --check src/
+
 
 publish-package:production:
   stage: publish
@@ -30,6 +39,7 @@ publish-package:production:
   script:
     - twine check dist/*
     - twine upload dist/*
+
 
 publish-docker:
   stage: publish
