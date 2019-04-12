@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""This module is used to use the GitLab API to automatically create a MR for a specific project, assigned to you.
+r"""This module is used to use the GitLab API to automatically create a MR for a specific project, assigned to you.
 This Python library is intended to be used by in a Docker image in the GitLab CI. Hences lots of the cli options can
 also be environment variables, most of which will be provided with the GitLab CI. However this package allows you
 to do this using the CLI if you so wish.
@@ -9,40 +9,17 @@ Example:
 
         $ pip install -e .
         $ gitlab_auto_mr --private-token xxx --source-branch feature --project-id 11121006 \
-                         --project-url https://gitlab.com/hmajid2301 --user-id 2902137
+                            --project-url https://gitlab.com/hmajid2301 --user-id 2902137
 
 .. _Google Python Style Guide:
-   http://google.github.io/styleguide/pyguide.html
+    http://google.github.io/styleguide/pyguide.html
 
 """
-
 import re
 import sys
 
-import requests
 import click
-
-
-"""Acts as the main function is called by when you use `gitlab_auto_mr`.
-
-* It checks if the source branch is the target branch
-* It checks if the MR already exists for that target onto the source
-* It then creates the MR
-* Finally it updates the MR which extra attributes i.e. Squash commits or Auto Merge etc.
-
-Args:
-    private_token (str): Private GITLAB token, used to authenticate when calling the MR API.
-    source_branch (str): The source branch to merge into..
-    project_id (int): The project ID on GitLab to create the MR for.
-    project_url (str): The project URL on GitLab to create the MR for.
-    user_id (int): The GitLab user ID to assign the created MR to.
-    target_branch (str): The target branch to merge onto, i.e. master.
-    commit_prefix (str): Prefix for the MR title i.e. WIP.
-    remove_branch (bool): Set to True if you want the source branch to be removed after MR
-    squash_commits (bool): Set to True if you want commits to be squashed.
-    description (str): Description in the MR.
-
-"""
+import requests
 
 
 @click.command()
@@ -52,12 +29,7 @@ Args:
     required=True,
     help="Private GITLAB token, used to authenticate when calling the MR API.",
 )
-@click.option(
-    "--source-branch",
-    envvar="CI_COMMIT_REF_NAME",
-    required=True,
-    help="The source branch to merge into.",
-)
+@click.option("--source-branch", envvar="CI_COMMIT_REF_NAME", required=True, help="The source branch to merge into.")
 @click.option(
     "--project-id",
     envvar="CI_PROJECT_ID",
@@ -66,10 +38,7 @@ Args:
     help="The project ID on GitLab to create the MR for.",
 )
 @click.option(
-    "--project-url",
-    envvar="CI_PROJECT_URL",
-    required=True,
-    help="The project URL on GitLab to create the MR for.",
+    "--project-url", envvar="CI_PROJECT_URL", required=True, help="The project URL on GitLab to create the MR for."
 )
 @click.option(
     "--user-id",
@@ -78,15 +47,8 @@ Args:
     type=int,
     help="The GitLab user ID to assign the created MR to.",
 )
-@click.option(
-    "--target-branch", envvar="TARGET_BRANCH", help="The target branch to merge onto."
-)
-@click.option(
-    "--commit-prefix",
-    envvar="COMMIT_PREFIX",
-    default="WIP",
-    help="Prefix for the MR title i.e. WIP.",
-)
+@click.option("--target-branch", envvar="TARGET_BRANCH", help="The target branch to merge onto.")
+@click.option("--commit-prefix", envvar="COMMIT_PREFIX", default="WIP", help="Prefix for the MR title i.e. WIP.")
 @click.option(
     "--remove-branch",
     envvar="REMOVE_BRANCH_AFTER_MERGE",
@@ -122,6 +84,26 @@ def cli(
     description,
     use_issue_name,
 ):
+    """Acts as the main function is called by when you use `gitlab_auto_mr`.
+
+    * It checks if the source branch is the target branch
+    * It checks if the MR already exists for that target onto the source
+    * It then creates the MR
+    * Finally it updates the MR which extra attributes i.e. Squash commits or Auto Merge etc.
+
+    Args:
+        private_token (str): Private GITLAB token, used to authenticate when calling the MR API.
+        source_branch (str): The source branch to merge into..
+        project_id (int): The project ID on GitLab to create the MR for.
+        project_url (str): The project URL on GitLab to create the MR for.
+        user_id (int): The GitLab user ID to assign the created MR to.
+        target_branch (str): The target branch to merge onto, i.e. master.
+        commit_prefix (str): Prefix for the MR title i.e. WIP.
+        remove_branch (bool): Set to True if you want the source branch to be removed after MR
+        squash_commits (bool): Set to True if you want commits to be squashed.
+        description (str): Description in the MR.
+
+    """
     try:
         url = get_api_url(project_id, project_url)
         commit_title = get_mr_title(commit_prefix, source_branch)
@@ -151,15 +133,10 @@ def cli(
                 sys.exit(1)
 
             response = make_api_call(f"{url}/issues/{issue_id[1:]}", headers=headers)
-            extra_data = {
-                "milestone_id": response["milestone"]["id"],
-                "labels": response["labels"],
-            }
+            extra_data = {"milestone_id": response["milestone"]["id"], "labels": response["labels"]}
             data = {**data, **extra_data}
 
-        make_api_call(
-            method="post", url=f"{url}/merge_requests", headers=headers, data=data
-        )
+        make_api_call(method="post", url=f"{url}/merge_requests", headers=headers, data=data)
         print(f"Created a new MR {commit_title}, assigned to you.")
     except ValueError:
         sys.exit(0)
@@ -211,9 +188,7 @@ def check_if_mr_exists(response, source_branch):
     """
     source_branch_mr = [mr for mr in response if mr["source_branch"] == source_branch]
     if source_branch_mr:
-        print(
-            f"no new merge request opened, one already exists for this branch {source_branch}."
-        )
+        print(f"no new merge request opened, one already exists for this branch {source_branch}.")
         raise ValueError
 
 
@@ -255,8 +230,7 @@ def get_target_branch(headers, target_branch, url):
 
 
 def make_api_call(url, method="get", headers=None, data=None):
-    """If target branch isn't specified find the default branch and use it as the target branch will typically be
-    master.
+    """Makes API call to GitLab.
 
     Args:
         url (str): The url to make the API request to.
@@ -269,6 +243,7 @@ def make_api_call(url, method="get", headers=None, data=None):
 
     Raises:
         SystemError: If the API request failed.
+
     """
     try:
         response = requests.request(method, url=url, headers=headers, json=data)

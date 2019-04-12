@@ -1,9 +1,19 @@
-.vscode/
-.idea/
-.history/
-.venv/
+# IDE
+.history
+.idea
+.vscode
+
+# Python Specific
+.venv
+.tox
 *.egg-info
-*.tar.gz
-dist/*
-__pycache__/
+__pycache__
+build
+dist
 *.pyc
+.cache
+.eggs
+
+# Other
+.git
+docs/source/conf.py
