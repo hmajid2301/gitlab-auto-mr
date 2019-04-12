@@ -108,6 +108,17 @@ Changelog
 The format is based on `Keep a Changelog`_, and this project adheres to
 `Semantic Versioning`_.
 
+[0.2.3] - 2019-04-12
+--------------------
+Added
+*****
+- Tox to the project
+- readthedocs integration
+
+Changed
+*******
+- README to include readthedocs badge
+
 [0.2.2post1] - 2019-04-11
 -------------------------
 Added
