@@ -11,14 +11,14 @@ stages:
   - publish
 
 
-lint:flake8:
+test:linter:
   stage: test
   image: alpine/flake8
   script:
     - flake8 src/
 
 
-lint:black:
+test:code-formatter:
   stage: test
   image: milansuk/python-black:latest
   script:
