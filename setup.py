@@ -6,6 +6,7 @@ setup(
     version="0.2.7",
     description="A simple tool for automatically creating merge requests in GitLab",
     long_description=open("README.rst").read(),
+    long_description_content_type="text/x-rst",
     author="Haseeb Majid",
     author_email="me@haseebmajid.com",
     keywords="Python",

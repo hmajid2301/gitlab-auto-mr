@@ -17,14 +17,14 @@ test:linter:
   stage: test
   script:
     - pip install tox
-    - tox -e lint
+    - make lint
 
 
 test:code-formatter:
   stage: test
   script:
     - pip install tox
-    - tox -e code-formatter-check
+    - make code-formatter-check
 
 
 publish-package:production:
@@ -34,12 +34,9 @@ publish-package:production:
   variables:
     TWINE_USERNAME: $PYPI_PRODUCTION_USERNAME
     TWINE_PASSWORD: $PYPI_PRODUCTION_PASSWORD
-  before_script:
-    - pip install twine
-    - python setup.py sdist
   script:
-    - twine check dist/*
-    - twine upload dist/*
+    - make pypi-check
+    - make pypi-upload
 
 
 publish-docker:

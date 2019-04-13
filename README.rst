@@ -127,6 +127,7 @@ Changed
 Fixed
 *****
 - Removed post1
+
 Changed
 *******
 - Moved changelog to separate file
