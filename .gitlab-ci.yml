@@ -35,6 +35,7 @@ publish-package:production:
     TWINE_USERNAME: $PYPI_PRODUCTION_USERNAME
     TWINE_PASSWORD: $PYPI_PRODUCTION_PASSWORD
   script:
+    - pip install tox
     - make pypi-check
     - make pypi-upload
 
