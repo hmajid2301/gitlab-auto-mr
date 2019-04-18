@@ -15,7 +15,6 @@ Example:
     http://google.github.io/styleguide/pyguide.html
 
 """
-import os
 import re
 import sys
 
@@ -132,7 +131,7 @@ def cli(
         if use_issue_name:
             try:
                 issue_id = re.search("#[0-9]+", source_branch).group(0)
-            except (IndexError, NoneType):
+            except (IndexError, AttributeError):
                 print(f"Issue Number not found in branch name {source_branch}")
                 sys.exit(1)
 
