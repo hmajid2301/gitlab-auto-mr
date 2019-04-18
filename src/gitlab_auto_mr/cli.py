@@ -132,7 +132,7 @@ def cli(
         if use_issue_name:
             try:
                 issue_id = re.search("#[0-9]+", source_branch).group(0)
-            except IndexError:
+            except (IndexError, NoneType):
                 print(f"Issue Number not found in branch name {source_branch}")
                 sys.exit(1)
 
