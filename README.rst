@@ -116,11 +116,17 @@ Changelog
 The format is based on `Keep a Changelog`_, and this project adheres to
 `Semantic Versioning`_.
 
+[0.2.8] - 2019-04-18
+--------------------
+Fixed
+*****
+- Catch ``NoneType`` errors if regex doesn't match.
+
 [0.2.7] - 2019-04-13
 --------------------
 Changed
 *******
-- Moved changelog back into rst
+- Moved changelog back into rst.
 
 [0.2.6] - 2019-04-12
 --------------------
@@ -130,54 +136,54 @@ Fixed
 
 Changed
 *******
-- Moved changelog to separate file
+- Moved changelog to separate file.
 
 [0.2.5] - 2019-04-12
 --------------------
 Fixed
 *****
-- README badges links
+- README badges links.
 
 [0.2.4] - 2019-04-12
 --------------------
 Fixed
 *****
-- README badges include links
+- README badges include links.
 
 [0.2.3] - 2019-04-12
 --------------------
 Added
 *****
-- Tox to the project
-- readthedocs integration
+- Tox to the project.
+- readthedocs integration.
 
 Changed
 *******
-- README to include readthedocs badge
+- README to include readthedocs badge.
 
 [0.2.2post1] - 2019-04-11
 -------------------------
 Added
 *****
-- Updated a README with a Changelog
+- Updated a README with a Changelog.
 
 [0.2.2] - 2019-04-10
 --------------------
 Fixed
 *****
-- Formatting error in README
+- Formatting error in README.
 
 [0.2.1] - 2019-04-10
 --------------------
 Fixed
 *****
-- Formatting error in README
+- Formatting error in README.
 
 [0.2.0] - 2019-04-10
 --------------------
 Added
 *****
-- Using black as code formatter
+- Using black as code formatter.
 - Added new argument, ``--use-issue-name`` which is adds settings from
    issue such as labels to the MR.
 
