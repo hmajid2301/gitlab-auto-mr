@@ -116,6 +116,12 @@ Changelog
 The format is based on `Keep a Changelog`_, and this project adheres to
 `Semantic Versioning`_.
 
+[0.2.9] - 2019-04-18
+--------------------
+Fixed
+*****
+- Changed error from ``NoneType`` to ``AttributeError``.
+
 [0.2.8] - 2019-04-18
 --------------------
 Fixed
