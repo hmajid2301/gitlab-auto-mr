@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 # [0.3.1] - 2019-04-29
 ## Fixed
   - If issue number doesn't exist on project labels and milestone will be none. Check if response from API call contains this data.
+  - Multiple `here's` in `README.rst` raising error when pushing to pypi.
 
 # [0.3.0] - 2019-04-29
 ## Changed
