@@ -136,8 +136,11 @@ def cli(
                 sys.exit(1)
 
             response = make_api_call(f"{url}/issues/{issue_id[1:]}", headers=headers)
-            extra_data = {"milestone_id": response["milestone"]["id"], "labels": response["labels"]}
-            data = {**data, **extra_data}
+            if "milestone" in response and "labels" in response:
+                extra_data = {"milestone_id": response["milestone"]["id"], "labels": response["labels"]}
+                data = {**data, **extra_data}
+            else:
+                print(f"Issue {issue_id} not found on project.")
 
         make_api_call(method="post", url=f"{url}/merge_requests", headers=headers, data=data)
         print(f"Created a new MR {commit_title}, assigned to you.")
