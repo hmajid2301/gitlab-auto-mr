@@ -113,7 +113,7 @@ You can set extra variables like so.
 Changelog
 =========
 
-You can find the changelog `here <https://gitlab.com/hmajid2301/gitlab-auto-mr/blob/master/CHANGELOG.md>_`.
+You can find the changelog `here <https://gitlab.com/hmajid2301/gitlab-auto-mr/blob/master/CHANGELOG.md>`_.
 
 Appendix
 ========
