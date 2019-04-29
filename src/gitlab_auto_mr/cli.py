@@ -15,6 +15,7 @@ Example:
     http://google.github.io/styleguide/pyguide.html
 
 """
+import os
 import re
 import sys
 
@@ -63,7 +64,7 @@ import requests
     default=False,
     help="Set to True if you want commits to be squashed.",
 )
-@click.option("--description", envvar="DESCRIPTION", help="Description in the MR.")
+@click.option("--description", envvar="DESCRIPTION", help="Path to file to use as the description for the MR.")
 @click.option(
     "--use-issue-name",
     envvar="USE_ISSUE_NAME",
@@ -101,7 +102,8 @@ def cli(
         commit_prefix (str): Prefix for the MR title i.e. WIP.
         remove_branch (bool): Set to True if you want the source branch to be removed after MR
         squash_commits (bool): Set to True if you want commits to be squashed.
-        description (str): Description in the MR.
+        description (str): Path to file to use as the description for the MR.
+        use_issue_name (bool): If set to True will use information from issue in branch name, must be in the form #issue-number, i.e feature/#6.
 
     """
     try:
@@ -114,6 +116,8 @@ def cli(
         response = make_api_call(f"{url}/merge_requests?state_opened", headers=headers)
         check_if_mr_exists(response, source_branch)
 
+        description_data = get_description_data(description)
+
         data = {
             "id": project_id,
             "source_branch": source_branch,
@@ -122,7 +126,7 @@ def cli(
             "squash": squash_commits,
             "title": commit_title,
             "assignee_id": user_id,
-            "description": description,
+            "description": description_data,
         }
 
         if use_issue_name:
@@ -190,6 +194,30 @@ def check_if_mr_exists(response, source_branch):
     if source_branch_mr:
         print(f"no new merge request opened, one already exists for this branch {source_branch}.")
         raise ValueError
+
+
+def get_description_data(description):
+    """If description is set will try to open the file (at given path), and read the contents.
+    To use as the description for the MR.
+
+    Args:
+        description (str): Path to description for MR.
+
+    Raises:
+        OSError: If couldn't open file for some reason.
+
+    """
+    description_data = ""
+    if description:
+        try:
+            with open(description) as mr_description:
+                description_data = mr_description.read()
+        except FileNotFoundError:
+            print(f"Unable to find description file at {description}. No description will be set.")
+        except OSError:
+            print(f"Unable to open description file at {description}. No description will be set.")
+
+    return description_data
 
 
 def get_mr_title(commit_prefix, source_branch):
