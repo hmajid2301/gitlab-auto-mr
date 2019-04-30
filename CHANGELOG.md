@@ -6,8 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [0.5.0] - 2019-04-30
+### Added
+- Tag docker image with version from `setup.py`.
+
 ### Fixed
 - Wrong url returned we only want host, we don't need API url.
+- Should be interacting like an object `mr.source_branch` instead of as a dict i.e. `mr["source_branch"]`
+- Use only `issue_number` i.e. `4` instead of `#4`.
 
 ## [0.4.1] - 2019-04-30
 ### Fixed

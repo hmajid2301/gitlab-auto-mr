@@ -92,7 +92,6 @@ def cli(
 ):
     """Gitlab Auto MR Tool."""
     gitlab_url = re.search("^https?://[^/]+", project_url).group(0)
-    commit_title = get_mr_title(commit_prefix, source_branch)
     gl = gitlab.Gitlab(gitlab_url, private_token=private_token)
     try:
         project = gl.projects.get(project_id)
@@ -107,9 +106,9 @@ def cli(
     if not valid:
         sys.exit(1)
 
+    commit_title = get_mr_title(commit_prefix, source_branch)
     description_data = get_description_data(description)
     data = {
-        "id": project_id,
         "source_branch": source_branch,
         "target_branch": target_branch,
         "remove_source_branch": remove_branch,
@@ -186,7 +185,7 @@ def does_mr_exists(project, source_branch):
     """
     mrs = project.mergerequests.list()
     exists = False
-    source_branch_mr = [mr for mr in mrs if mr["source_branch"] == source_branch]
+    source_branch_mr = [mr for mr in mrs if mr.source_branch == source_branch]
     if source_branch_mr:
         exists = True
     return exists
@@ -234,12 +233,13 @@ def get_issue_data(project, source_branch, use_issue_name):
     data = {}
     if use_issue_name:
         try:
-            issue_id = re.search("#[0-9]+", source_branch).group(0)
+            issue = re.search("#[0-9]+", source_branch).group(0)
+            issue_id = int(issue.replace("#", ""))
             issue = project.issues.get(issue_id)
             data = {"milestone_id": issue.milestone["iid"], "labels": issue.labels}
         except gitlab.exceptions.GitlabGetError as e:
             print(f"Issue {issue} not found, {e}.")
-        except (IndexError, AttributeError):
+        except (IndexError, AttributeError, TypeError):
             print(f"Issue Number not found in branch name {source_branch}")
 
     return data

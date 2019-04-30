@@ -35,7 +35,7 @@ First you need to create a personal access token,
 `more information here <https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html>`_.
 With the scope ``api``, so it can create the MR using your API.
 
-.. code-block::
+.. code-block:: bash
 
     pip install gitlab-auto-mr
     gitlab_auto_mr --help
@@ -63,7 +63,7 @@ Options:
                             i.e feature/#6.
   --help                    Show this message and exit.
 
-.. code-block::
+.. code-block:: bash
 
     gitlab_auto_mr --private-token $(private_token) --source-branch feature/test --project-id 5 \
                     --project-url https://gitlab.com/hmajid2301/stegappasaurus --user-id 5
@@ -78,7 +78,7 @@ An example CI using this can be `found here <https://gitlab.com/hmajid2301/stega
 
 Add the following to your ``.gitlab-ci.yml`` file:
 
-.. code-block::
+.. code-block:: yaml
 
     stages:
       - open
@@ -96,7 +96,7 @@ Add the following to your ``.gitlab-ci.yml`` file:
 
 You can set extra variables like so.
 
-.. code-block::
+.. code-block:: yaml
 
     variables:
       GIT_STRATEGY: none # We do not need a clone of the GIT repository to create a Merge Request
