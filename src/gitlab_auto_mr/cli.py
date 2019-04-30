@@ -244,7 +244,7 @@ def get_issue_data(project, source_branch, use_issue_name):
         description (str): Path to description for MR.
 
     Returns
-        dict: With the extra fields from issue, such as labels and milestone. This \
+        dict: With the extra fields from issue, such as labels and milestone. This
         is empty if could not find issue.
 
     """
