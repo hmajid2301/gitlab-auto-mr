@@ -102,9 +102,7 @@ def cli(
     if not target_branch:
         target_branch = project.default_branch
 
-    valid = is_mr_valid(project, source_branch, target_branch)
-    if not valid:
-        sys.exit(1)
+    check_if_mr_is_valid(project, source_branch, target_branch)
 
     commit_title = get_mr_title(commit_prefix, source_branch)
     description_data = get_description_data(description)
@@ -142,34 +140,28 @@ def get_mr_title(commit_prefix, source_branch):
     return commit_title
 
 
-def is_mr_valid(project, source_branch, target_branch):
+def check_if_mr_is_valid(project, source_branch, target_branch):
     """Checks if the MR is valid:
 
-    * Are source branch is target branch
-    * Does MR already exist for this source branch
+    * Are source branch is target branch, exits with an error.
+    * Does MR already exist for this source branch, exits without an error.
 
     Args:
         project (gitlab.v4.objects.Project): The json response from API checking which MRs are currently open.
         source_branch (str): The source branch to merge into (i.e. feature/#67).
         target_branch (str): The target branch to merge onto (i.e. master).
 
-    Returns
-        bool: True if MR is valid. False if the MR is not valid, i.e. MR already exists.
-
     """
-    valid = True
     if source_branch == target_branch:
         print(
             f"Source Branch and Target branches must be different, source: {source_branch} and target: {target_branch}."
         )
-        valid = False
+        sys.exit(1)
 
     exists = does_mr_exists(project, source_branch)
     if exists:
         print(f"no new merge request opened, one already exists for this branch {source_branch}.")
-        valid = False
-
-    return valid
+        sys.exit(0)
 
 
 def does_mr_exists(project, source_branch):
