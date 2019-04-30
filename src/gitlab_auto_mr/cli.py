@@ -171,7 +171,8 @@ def is_mr_valid(project, source_branch, target_branch):
         source_branch (str): The source branch to merge into (i.e. feature/#67).
         target_branch (str): The target branch to merge onto (i.e. master).
 
-    Returns (bool): True if MR is valid. False if the MR is not valid, i.e. MR already exists.
+    Returns
+        bool: True if MR is valid. False if the MR is not valid, i.e. MR already exists.
 
     """
     valid = True
@@ -196,7 +197,8 @@ def does_mr_exists(project, source_branch):
         project (gitlab.v4.objects.Project): The json response from API checking which MRs are currently open.
         source_branch (str): The source branch to merge into (i.e. feature/#67).
 
-    Returns (bool): True if the MR already exists, else returns False.
+    Returns
+        bool: True if the MR already exists, else returns False.
 
     """
     mrs = project.mergerequests.list()
@@ -214,7 +216,8 @@ def get_description_data(description):
     Args:
         description (str): Path to description for MR.
 
-    Returns (str): The description to use for the MR.
+    Returns
+        str: The description to use for the MR.
 
     Raises:
         OSError: If couldn't open file for some reason.
@@ -240,8 +243,9 @@ def get_issue_data(project, source_branch, use_issue_name):
     Args:
         description (str): Path to description for MR.
 
-    Returns (dict): With the extra fields from issue, such as labels and milestone. This
-    is empty if could not find issue.
+    Returns
+        dict: With the extra fields from issue, such as labels and milestone. This \
+        is empty if could not find issue.
 
     """
     data = {}
