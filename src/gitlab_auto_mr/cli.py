@@ -1,8 +1,14 @@
 # -*- coding: utf-8 -*-
 r"""This module is used to use the GitLab API to automatically create a MR for a specific project, assigned to you.
-This Python library is intended to be used by in a Docker image in the GitLab CI. Hences lots of the cli options can
+This Python library is intended to be used by in a Docker image in the GitLab CI. Hence lots of the cli options can
 also be environment variables, most of which will be provided with the GitLab CI. However this package allows you
-to do this using the CLI if you so wish.
+to do this using the CLI if you so wish. It does the following:
+
+    * It checks if the source branch is the target branch
+    * It checks if the MR already exists for that target onto the source
+    * Gets any extra issue data
+    * It then creates the MR
+    * Finally it updates the MR which extra attributes i.e. Squash commits or Auto Merge etc
 
 Example:
     ::
@@ -19,7 +25,7 @@ import re
 import sys
 
 import click
-import requests
+import gitlab
 
 
 @click.command()
@@ -84,70 +90,39 @@ def cli(
     description,
     use_issue_name,
 ):
-    """Acts as the main function is called by when you use `gitlab_auto_mr`.
-
-    * It checks if the source branch is the target branch
-    * It checks if the MR already exists for that target onto the source
-    * It then creates the MR
-    * Finally it updates the MR which extra attributes i.e. Squash commits or Auto Merge etc.
-
-    Args:
-        private_token (str): Private GITLAB token, used to authenticate when calling the MR API.
-        source_branch (str): The source branch to merge into..
-        project_id (int): The project ID on GitLab to create the MR for.
-        project_url (str): The project URL on GitLab to create the MR for.
-        user_id (int): The GitLab user ID to assign the created MR to.
-        target_branch (str): The target branch to merge onto, i.e. master.
-        commit_prefix (str): Prefix for the MR title i.e. WIP.
-        remove_branch (bool): Set to True if you want the source branch to be removed after MR
-        squash_commits (bool): Set to True if you want commits to be squashed.
-        description (str): Path to file to use as the description for the MR.
-        use_issue_name (bool): If set to True will use information from issue in branch name, must be in the form #issue-number, i.e feature/#6.
-
-    """
+    """Gitlab Auto MR Tool."""
+    url = get_api_url(project_id, project_url)
+    commit_title = get_mr_title(commit_prefix, source_branch)
+    gl = gitlab.Gitlab(url, private_token=private_token)
     try:
-        url = get_api_url(project_id, project_url)
-        commit_title = get_mr_title(commit_prefix, source_branch)
-        headers = {"PRIVATE-TOKEN": private_token}
-        target_branch = get_target_branch(headers, target_branch, url)
-
-        check_if_source_is_target(source_branch, target_branch)
-        response = make_api_call(f"{url}/merge_requests?state_opened", headers=headers)
-        check_if_mr_exists(response, source_branch)
-
-        description_data = get_description_data(description)
-
-        data = {
-            "id": project_id,
-            "source_branch": source_branch,
-            "target_branch": target_branch,
-            "remove_source_branch": remove_branch,
-            "squash": squash_commits,
-            "title": commit_title,
-            "assignee_id": user_id,
-            "description": description_data,
-        }
-
-        if use_issue_name:
-            try:
-                issue_id = re.search("#[0-9]+", source_branch).group(0)
-            except (IndexError, AttributeError):
-                print(f"Issue Number not found in branch name {source_branch}")
-                sys.exit(1)
-
-            response = make_api_call(f"{url}/issues/{issue_id[1:]}", headers=headers)
-            if "milestone" in response and "labels" in response:
-                extra_data = {"milestone_id": response["milestone"]["id"], "labels": response["labels"]}
-                data = {**data, **extra_data}
-            else:
-                print(f"Issue {issue_id} not found on project.")
-
-        make_api_call(method="post", url=f"{url}/merge_requests", headers=headers, data=data)
-        print(f"Created a new MR {commit_title}, assigned to you.")
-    except ValueError:
-        sys.exit(0)
-    except SystemError:
+        project = gl.project.get(project_id)
+    except gitlab.exceptions.GitlabGetError as e:
+        print(f"Unable to get project {e}.")
         sys.exit(1)
+
+    if not target_branch:
+        target_branch = project.default_branch
+
+    valid = is_mr_valid(project, source_branch, target_branch)
+    if not valid:
+        sys.exit(1)
+
+    description_data = get_description_data(description)
+    data = {
+        "id": project_id,
+        "source_branch": source_branch,
+        "target_branch": target_branch,
+        "remove_source_branch": remove_branch,
+        "squash": squash_commits,
+        "title": commit_title,
+        "assignee_id": user_id,
+        "description": description_data,
+    }
+
+    issue_data = get_issue_data(project, source_branch, use_issue_name)
+    data = {**issue_data, **data}
+    project.mergerequests.create(data)
+    print(f"Created a new MR {commit_title}, assigned to you.")
 
 
 def get_api_url(project_id, project_url):
@@ -165,61 +140,6 @@ def get_api_url(project_id, project_url):
     host = re.search("^https?://[^/]+", project_url).group(0)
     url = f"{host}/api/v4/projects/{project_id}"
     return url
-
-
-def check_if_source_is_target(source_branch, target_branch):
-    """Checks if the target branch and source branch are the same.
-
-    Args:
-        source_branch (str): The source branch to merge into..
-        target_branch (str): The target branch to merge onto, i.e. master.
-
-    """
-    if source_branch == target_branch:
-        print("Source Branch and Target branches must be different.")
-        print(f"Source: {source_branch}, Target: {target_branch}")
-        sys.exit(1)
-
-
-def check_if_mr_exists(response, source_branch):
-    """Checks if an MR for the source branch (i.e. feature/abc) already exists.
-
-    Args:
-        response (dict): The json response from API checking which MRs are currently open.
-        source_branch (str): The source branch to merge into..
-
-    Raises:
-        SystemError: If MR already exists.
-
-    """
-    source_branch_mr = [mr for mr in response if mr["source_branch"] == source_branch]
-    if source_branch_mr:
-        print(f"no new merge request opened, one already exists for this branch {source_branch}.")
-        raise ValueError
-
-
-def get_description_data(description):
-    """If description is set will try to open the file (at given path), and read the contents.
-    To use as the description for the MR.
-
-    Args:
-        description (str): Path to description for MR.
-
-    Raises:
-        OSError: If couldn't open file for some reason.
-
-    """
-    description_data = ""
-    if description:
-        try:
-            with open(description) as mr_description:
-                description_data = mr_description.read()
-        except FileNotFoundError:
-            print(f"Unable to find description file at {description}. No description will be set.")
-        except OSError:
-            print(f"Unable to open description file at {description}. No description will be set.")
-
-    return description_data
 
 
 def get_mr_title(commit_prefix, source_branch):
@@ -240,49 +160,99 @@ def get_mr_title(commit_prefix, source_branch):
     return commit_title
 
 
-def get_target_branch(headers, target_branch, url):
-    """If target branch isn't specified find the default branch and use it as the target branch will typically be
-    master.
+def is_mr_valid(project, source_branch, target_branch):
+    """Checks if the MR is valid:
+
+    * Are source branch is target branch
+    * Does MR already exist for this source branch
 
     Args:
-        headers (dict): Headers for the API request.
-        target_branch (str): The target branch to merge onto, i.e. master.
-        url (str): The url to make the API request to.
+        project (gitlab.v4.objects.Project): The json response from API checking which MRs are currently open.
+        source_branch (str): The source branch to merge into (i.e. feature/#67).
+        target_branch (str): The target branch to merge onto (i.e. master).
 
-    Returns:
-        str: The target branch name.
+    Returns (bool): True if MR is valid. False if the MR is not valid, i.e. MR already exists.
 
     """
-    if not target_branch:
-        response = make_api_call(url=url, headers=headers)
-        target_branch = response["default_branch"]
-    return target_branch
+    valid = True
+    if source_branch == target_branch:
+        print(
+            f"Source Branch and Target branches must be different, source: {source_branch} and target: {target_branch}."
+        )
+        valid = False
+
+    exists = does_mr_exists(project, source_branch)
+    if exists:
+        print(f"no new merge request opened, one already exists for this branch {source_branch}.")
+        valid = False
+
+    return valid
 
 
-def make_api_call(url, method="get", headers=None, data=None):
-    """Makes API call to GitLab.
+def does_mr_exists(project, source_branch):
+    """Checks if an MR for the source branch (i.e. feature/abc) already exists.
 
     Args:
-        url (str): The url to make the API request to.
-        method (:obj:`str`, optional): The HTTP verb to use. Defaults to get.
-        headers (:obj:`dict`, optional): Headers for the API request. Defaults to None.
-        data (:obj:`dict`, optional): The body for the API request, Default to None. Will be sent as json.
+        project (gitlab.v4.objects.Project): The json response from API checking which MRs are currently open.
+        source_branch (str): The source branch to merge into (i.e. feature/#67).
 
-    Returns:
-        dict: The API response (json).
+    Returns (bool): True if the MR already exists, else returns False.
+
+    """
+    mrs = project.mergerequests.list()
+    exists = False
+    source_branch_mr = [mr for mr in mrs if mr["source_branch"] == source_branch]
+    if source_branch_mr:
+        exists = True
+    return exists
+
+
+def get_description_data(description):
+    """If description is set will try to open the file (at given path), and read the contents.
+    To use as the description for the MR.
+
+    Args:
+        description (str): Path to description for MR.
+
+    Returns (str): The description to use for the MR.
 
     Raises:
-        SystemError: If the API request failed.
+        OSError: If couldn't open file for some reason.
 
     """
-    try:
-        response = requests.request(method, url=url, headers=headers, json=data)
-        if response.status_code in [200, 201]:
-            return response.json()
-    except requests.exceptions.ConnectionError:
-        print(f"Failed to connect to {url}")
-    except requests.exceptions.Timeout:
-        print(f"Timed out connecting to {url}")
+    description_data = ""
+    if description:
+        try:
+            with open(description) as mr_description:
+                description_data = mr_description.read()
+        except FileNotFoundError:
+            print(f"Unable to find description file at {description}. No description will be set.")
+        except OSError:
+            print(f"Unable to open description file at {description}. No description will be set.")
 
-    print(f"API request failed to {url}")
-    raise SystemError
+    return description_data
+
+
+def get_issue_data(project, source_branch, use_issue_name):
+    """If the use issue name flag is set then tries to get more information to use with the
+    MR from the issue, such as Milestone and Labels.
+
+    Args:
+        description (str): Path to description for MR.
+
+    Returns (dict): With the extra fields from issue, such as labels and milestone. This
+    is empty if could not find issue.
+
+    """
+    data = {}
+    if use_issue_name:
+        try:
+            issue_id = re.search("#[0-9]+", source_branch).group(0)
+            issue = project.issues.get(issue_id)
+            data = {"milestone_id": issue.milestone["iid"], "labels": issue.labels}
+        except gitlab.exceptions.GitlabGetError as e:
+            print(f"Issue {issue} not found, {e}.")
+        except (IndexError, AttributeError):
+            print(f"Issue Number not found in branch name {source_branch}")
+
+    return data
