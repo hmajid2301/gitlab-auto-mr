@@ -95,7 +95,7 @@ def cli(
     commit_title = get_mr_title(commit_prefix, source_branch)
     gl = gitlab.Gitlab(url, private_token=private_token)
     try:
-        project = gl.project.get(project_id)
+        project = gl.projects.get(project_id)
     except gitlab.exceptions.GitlabGetError as e:
         print(f"Unable to get project {e}.")
         sys.exit(1)
