@@ -91,13 +91,13 @@ def cli(
     use_issue_name,
 ):
     """Gitlab Auto MR Tool."""
-    url = get_api_url(project_id, project_url)
+    gitlab_url = re.search("^https?://[^/]+", project_url).group(0)
     commit_title = get_mr_title(commit_prefix, source_branch)
-    gl = gitlab.Gitlab(url, private_token=private_token)
+    gl = gitlab.Gitlab(gitlab_url, private_token=private_token)
     try:
         project = gl.projects.get(project_id)
     except gitlab.exceptions.GitlabGetError as e:
-        print(f"Unable to get project {e}.")
+        print(f"Unable to get project {project_id}. Error: {e}.")
         sys.exit(1)
 
     if not target_branch:
@@ -123,23 +123,6 @@ def cli(
     data = {**issue_data, **data}
     project.mergerequests.create(data)
     print(f"Created a new MR {commit_title}, assigned to you.")
-
-
-def get_api_url(project_id, project_url):
-    """Gets the url (base name) i.e. gitlab.com or a private gitlab instance to make the API call to. The full API path
-    would be {host}/api/v4/projects
-
-    Args:
-        project_id (int): The project ID on GitLab to create the MR for.
-        project_url (str): The project URL on GitLab to create the MR for.
-
-    Returns:
-        str: The base url name i.e. gitlab.com
-
-    """
-    host = re.search("^https?://[^/]+", project_url).group(0)
-    url = f"{host}/api/v4/projects/{project_id}"
-    return url
 
 
 def get_mr_title(commit_prefix, source_branch):
