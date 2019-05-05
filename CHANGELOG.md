@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.2] - 2019-05-05
+### Fixed
+- To set milestone should be `id` not `iid`.
+
 ## [0.5.1] - 2019-04-30
 ### Changed
 - Function from `is_mr_valid` to `check_if_mr_is_valid`.

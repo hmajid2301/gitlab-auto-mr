@@ -228,7 +228,7 @@ def get_issue_data(project, source_branch, use_issue_name):
             issue = re.search("#[0-9]+", source_branch).group(0)
             issue_id = int(issue.replace("#", ""))
             issue = project.issues.get(issue_id)
-            data = {"milestone_id": issue.milestone["iid"], "labels": issue.labels}
+            data = {"milestone_id": issue.milestone["id"], "labels": issue.labels}
         except gitlab.exceptions.GitlabGetError as e:
             print(f"Issue {issue} not found, {e}.")
         except (IndexError, AttributeError, TypeError):

@@ -23,7 +23,7 @@ copyright = "2019, Haseeb majid"
 author = "Haseeb Majid"
 
 # The full version, including alpha/beta/rc tags
-release = "0.5.1"
+release = "0.5.2"
 
 
 # -- General configuration ---------------------------------------------------
