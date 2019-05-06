@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Mock import `gitlab` in `conf.py`.
 
+### Removed
+- `m2r` library as a dependency for docs (Sphinx).
+
 ## [0.5.2] - 2019-05-05
 ### Fixed
 - To set milestone should be `id` not `iid`.
