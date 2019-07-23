@@ -7,7 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
-- using `pipenv` to manage dependencies. 
+- Using `pipenv` to manage dependencies. 
+- `.dockerignore` file.
 
 ### Fixed
 - Mock import `gitlab` in `conf.py`.
@@ -15,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 - `m2r` library as a dependency for docs (Sphinx).
+- Removed `requirements.txt` file.
 
 ## [0.5.2] - 2019-05-05
 ### Fixed
