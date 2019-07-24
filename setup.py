@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name="gitlab-auto-mr",
-    version="0.5.2",
+    version="0.6.0",
     description="A simple tool for automatically creating merge requests in GitLab",
     long_description=open("README.rst").read(),
     long_description_content_type="text/x-rst",

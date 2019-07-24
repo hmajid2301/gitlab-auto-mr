@@ -61,7 +61,10 @@ Options:
   --use-issue-name BOOLEAN  If set to True will use information from issue in
                             branch name, must be in the form #issue-number,
                             i.e feature/#6.
+  --allow-collaboration     If set to True allow, commits from members who
+                            can merge to the target branch.
   --help                    Show this message and exit.
+
 
 .. code-block:: bash
 
@@ -109,6 +112,7 @@ You can set extra variables like so.
 - TARGET_BRANCH: The target branch for the MR
 - DESCRIPTION: Description of the MR
 - USE_ISSUE_NAME: If set to True will use information from issue in branch name, must be in the form #issue-number, i.e feature/#6.
+- ALLOW_COLLABORATION: If set to True allow, commits from members who can merge to the target branch.
 
 Changelog
 =========

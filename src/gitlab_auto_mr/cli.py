@@ -77,6 +77,13 @@ import gitlab
     default=False,
     help="If set to True will use information from issue in branch name, must be in the form #issue-number, i.e feature/#6.",
 )
+@click.option(
+    "--allow-collaboration",
+    envvar="ALLOW_COLLABORATION",
+    type=bool,
+    default=False,
+    help="If set to True allow, commits from members who can merge to the target branch.",
+)
 def cli(
     private_token,
     source_branch,
@@ -89,6 +96,7 @@ def cli(
     squash_commits,
     description,
     use_issue_name,
+    allow_collaboration,
 ):
     """Gitlab Auto MR Tool."""
     gitlab_url = re.search("^https?://[^/]+", project_url).group(0)
@@ -114,6 +122,7 @@ def cli(
         "title": commit_title,
         "assignee_id": user_id,
         "description": description_data,
+        "allow_collaboration": allow_collaboration,
     }
 
     issue_data = get_issue_data(project, source_branch, use_issue_name)
