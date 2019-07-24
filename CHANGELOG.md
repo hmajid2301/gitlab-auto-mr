@@ -6,12 +6,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Changed
+- `code-formatter` to include `{posargs}` so we can use it to format our code, and also to check it in the same target.
+
 ### Fixed
 - Mock import `gitlab` in `conf.py`.
 - Master doc file not found error on `readthedocs`, explicity added it into `conf.py`.
 
 ### Removed
 - `m2r` library as a dependency for docs (Sphinx).
+- `code-formatter-check` target in tox.
 
 ## [0.5.2] - 2019-05-05
 ### Fixed
