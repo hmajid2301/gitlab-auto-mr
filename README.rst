@@ -1,5 +1,5 @@
-.. image:: https://gitlab.com/hmajid2301/gitlab-auto-mr/badges/master/pipeline.svg
-   :target: https://gitlab.com/hmajid2301/gitlab-auto-mr
+.. image:: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/badges/master/pipeline.svg
+   :target: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr
    :alt: Pipeline Status
 
 .. image:: https://img.shields.io/pypi/l/gitlab-auto-mr.svg
@@ -19,7 +19,7 @@ GitLab Auto MR
 
 This is a simple Python script that allows you create MR in GitLab automatically. It is intended to be used in CI/CD
 as a Docker image. However you can use it as a separate Python library if you would like.
-An example CI using this can be found `here <https://gitlab.com/hmajid2301/stegappasaurus/blob/master/.gitlab-ci.yml>`_.
+An example CI using this can be found `here <https://gitlab.com/stegappasaurus/stegappasaurus-app/blob/master/.gitlab-ci.yml>`_.
 
 It is based on the script and idea of `Riccardo Padovani <https://rpadovani.com>`_,
 which he introduced with his blog post
@@ -69,7 +69,7 @@ Options:
 .. code-block:: bash
 
     gitlab_auto_mr --private-token $(private_token) --source-branch feature/test --project-id 5 \
-                    --project-url https://gitlab.com/hmajid2301/stegappasaurus --user-id 5
+                    --project-url https://gitlab.com/stegappasaurus/stegappasaurus-app --user-id 5
 
 GitLab CI
 *********
@@ -77,7 +77,7 @@ GitLab CI
 ``GITLAB_PRIVATE_TOKEN`` Set a secret variable in your GitLab project with your private token. Name it
 GITLAB_PRIVATE_TOKEN (``CI/CD > Environment Variables``). This is necessary to raise the Merge Request on your behalf.
 More information `click here <https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html>`_.
-An example CI using this can be `found here <https://gitlab.com/hmajid2301/stegappasaurus/blob/master/.gitlab-ci.yml>`_.
+An example CI using this can be `found here <https://gitlab.com/stegappasaurus/stegappasaurus-app/blob/master/.gitlab-ci.yml>`_.
 
 Add the following to your ``.gitlab-ci.yml`` file:
 
@@ -87,7 +87,7 @@ Add the following to your ``.gitlab-ci.yml`` file:
       - open
 
     open_merge_request:
-      image: registry.gitlab.com/hmajid2301/gitlab-auto-mr
+      image: registry.gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr
       before_script: [] # We do not need any setup work, let's remove the global one (if any)
       variables:
         GIT_STRATEGY: none # We do not need a clone of the GIT repository to create a Merge Request
@@ -117,7 +117,7 @@ You can set extra variables like so.
 Changelog
 =========
 
-You can find the `changelog here <https://gitlab.com/hmajid2301/gitlab-auto-mr/blob/master/CHANGELOG.md>`_.
+You can find the `changelog here <https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/blob/master/CHANGELOG.md>`_.
 
 Appendix
 ========

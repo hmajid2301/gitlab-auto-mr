@@ -15,7 +15,7 @@ Example:
 
         $ pip install -e .
         $ gitlab_auto_mr --private-token xxx --source-branch feature --project-id 11121006 \
-                            --project-url https://gitlab.com/hmajid2301 --user-id 2902137
+                            --project-url https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr --user-id 2902137
 
 .. _Google Python Style Guide:
     http://google.github.io/styleguide/pyguide.html
