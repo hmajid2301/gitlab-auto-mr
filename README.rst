@@ -40,30 +40,32 @@ With the scope ``api``, so it can create the MR using your API.
     pip install gitlab-auto-mr
     gitlab_auto_mr --help
 
-    Usage: gitlab_auto_mr [OPTIONS]
+  Usage: gitlab_auto_mr [OPTIONS]
 
-Options:
-  --private-token TEXT      Private GITLAB token, used to authenticate when
-                            calling the MR API.  [required]
-  --source-branch TEXT      The source branch to merge into.  [required]
-  --project-id INTEGER      The project ID on GitLab to create the MR for.
-                            [required]
-  --project-url TEXT        The project URL on GitLab to create the MR for.
-                            [required]
-  --user-id INTEGER         The GitLab user ID to assign the created MR to.
-                            [required]
-  --target-branch TEXT      The target branch to merge onto.
-  --commit-prefix TEXT      Prefix for the MR title i.e. WIP.
-  --remove-branch BOOLEAN   Set to True if you want the source branch to be
-                            removed after MR.
-  --squash-commits BOOLEAN  Set to True if you want commits to be squashed.
-  --description TEXT        Path to file to use as the description for the MR.
-  --use-issue-name BOOLEAN  If set to True will use information from issue in
-                            branch name, must be in the form #issue-number,
-                            i.e feature/#6.
-  --allow-collaboration     If set to True allow, commits from members who
-                            can merge to the target branch.
-  --help                    Show this message and exit.
+    Gitlab Auto MR Tool.
+
+  Options:
+    --private-token TEXT      Private GITLAB token, used to authenticate when
+                              calling the MR API.  [required]
+    --source-branch TEXT      The source branch to merge into.  [required]
+    --project-id INTEGER      The project ID on GitLab to create the MR for.
+                              [required]
+    --project-url TEXT        The project URL on GitLab to create the MR for.
+                              [required]
+    --user-id INTEGER         The GitLab user ID to assign the created MR to.
+                              [required]
+    -t, --target-branch TEXT  The target branch to merge onto.
+    -c, --commit-prefix TEXT  Prefix for the MR title i.e. WIP.
+    -r, --remove-branch       Set to True if you want the source branch to be
+                              removed after MR.
+    -s, --squash-commits      Set to True if you want commits to be squashed.
+    -d, --description TEXT    Path to file to use as the description for the MR.
+    --use-issue-name          If set to True will use information from issue in
+                              branch name, must be in the form #issue-number,
+                              i.e feature/#6.
+    --allow-collaboration     If set to True allow, commits from members who can
+                              merge to the target branch.
+    --help                    Show this message and exit.
 
 
 .. code-block:: bash
