@@ -53,35 +53,21 @@ import gitlab
     type=int,
     help="The GitLab user ID to assign the created MR to.",
 )
-@click.option("--target-branch", envvar="TARGET_BRANCH", help="The target branch to merge onto.")
-@click.option("--commit-prefix", envvar="COMMIT_PREFIX", default="WIP", help="Prefix for the MR title i.e. WIP.")
+@click.option("--target-branch", "-t", help="The target branch to merge onto.")
+@click.option("--commit-prefix", "-c", default="WIP", help="Prefix for the MR title i.e. WIP.")
 @click.option(
-    "--remove-branch",
-    envvar="REMOVE_BRANCH_AFTER_MERGE",
-    type=bool,
-    default=False,
-    help="Set to True if you want the source branch to be removed after MR.",
+    "--remove-branch", "-r", is_flag=True, help="Set to True if you want the source branch to be removed after MR."
 )
-@click.option(
-    "--squash-commits",
-    envvar="SQUASH",
-    type=bool,
-    default=False,
-    help="Set to True if you want commits to be squashed.",
-)
-@click.option("--description", envvar="DESCRIPTION", help="Path to file to use as the description for the MR.")
+@click.option("--squash-commits", "-s", is_flag=True, help="Set to True if you want commits to be squashed.")
+@click.option("--description", "-d", type=str, help="Path to file to use as the description for the MR.")
 @click.option(
     "--use-issue-name",
-    envvar="USE_ISSUE_NAME",
-    type=bool,
-    default=False,
+    is_flag=True,
     help="If set to True will use information from issue in branch name, must be in the form #issue-number, i.e feature/#6.",
 )
 @click.option(
     "--allow-collaboration",
-    envvar="ALLOW_COLLABORATION",
-    type=bool,
-    default=False,
+    is_flag=True,
     help="If set to True allow, commits from members who can merge to the target branch.",
 )
 def cli(

@@ -97,23 +97,6 @@ Add the following to your ``.gitlab-ci.yml`` file:
       script:
         - gitlab_auto_mr
 
-You can set extra variables like so.
-
-.. code-block:: yaml
-
-    variables:
-      GIT_STRATEGY: none # We do not need a clone of the GIT repository to create a Merge Request
-      TARGET_BRANCH: master # Target branch for MR
-
-- COMMIT PREFIX: Prefix for the MR i.e. WIP
-- REMOVE_BRANCH_AFTER_MERGE: Will delete branch after merge
-- SQUASH: Will squash commits after merge
-- AUTO_MERGE: Will auto merge request after being reviewed and CI passes
-- TARGET_BRANCH: The target branch for the MR
-- DESCRIPTION: Description of the MR
-- USE_ISSUE_NAME: If set to True will use information from issue in branch name, must be in the form #issue-number, i.e feature/#6.
-- ALLOW_COLLABORATION: If set to True allow, commits from members who can merge to the target branch.
-
 Changelog
 =========
 
