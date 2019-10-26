@@ -108,8 +108,8 @@ For more information `click here <https://docs.gitlab.com/ee/ci/variables/predef
 * If ``--user-id`` is not set it will look for for the ENV variable ``GITLAB_USER_ID``
 
 
-Development
-===========
+Setup Development Environment
+=============================
 
 .. code-block:: bash
 
@@ -117,6 +117,7 @@ Development
   cd gitlab-auto-mr
   pip install tox
   make virtualenv
+  make install-dev
 
 Changelog
 =========
