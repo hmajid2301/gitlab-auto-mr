@@ -47,7 +47,7 @@ to the script with the ``--private-token`` argument.
     --source-branch TEXT      The source branch to merge into.  [required]
     --project-id INTEGER      The project ID on GitLab to create the MR for.
                               [required]
-    --project-url TEXT        The project URL on GitLab to create the MR for.
+    --gitlab-url TEXT         The gitlab URL i.e. gitlab.com.
                               [required]
     --user-id INTEGER         The GitLab user ID to assign the created MR to.
                               [required]

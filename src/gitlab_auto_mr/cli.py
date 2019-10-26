@@ -44,9 +44,7 @@ import gitlab
     type=int,
     help="The project ID on GitLab to create the MR for.",
 )
-@click.option(
-    "--gitlab-url", envvar="CI_PROJECT_URL", required=True, help="The project URL on GitLab to create the MR for."
-)
+@click.option("--gitlab-url", envvar="CI_PROJECT_URL", required=True, help="The GitLab URL i.e. gitlab.com.")
 @click.option(
     "--user-id",
     envvar="GITLAB_USER_ID",
