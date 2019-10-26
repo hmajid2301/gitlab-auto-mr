@@ -173,7 +173,7 @@ def does_mr_exists(project, source_branch):
         bool: True if the MR already exists, else returns False.
 
     """
-    mrs = project.mergerequests.list()
+    mrs = project.mergerequests.list(state="opened")
     exists = False
     source_branch_mr = [mr for mr in mrs if mr.source_branch == source_branch]
     if source_branch_mr:
