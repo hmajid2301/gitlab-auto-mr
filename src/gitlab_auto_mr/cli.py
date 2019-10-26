@@ -21,6 +21,7 @@ Example:
     http://google.github.io/styleguide/pyguide.html
 
 """
+import os
 import re
 import sys
 
@@ -44,7 +45,7 @@ import gitlab
     help="The project ID on GitLab to create the MR for.",
 )
 @click.option(
-    "--project-url", envvar="CI_PROJECT_URL", required=True, help="The project URL on GitLab to create the MR for."
+    "--gitlab-url", envvar="CI_PROJECT_URL", required=True, help="The project URL on GitLab to create the MR for."
 )
 @click.option(
     "--user-id",
@@ -74,7 +75,7 @@ def cli(
     private_token,
     source_branch,
     project_id,
-    project_url,
+    gitlab_url,
     user_id,
     target_branch,
     commit_prefix,
@@ -85,7 +86,9 @@ def cli(
     allow_collaboration,
 ):
     """Gitlab Auto MR Tool."""
-    gitlab_url = re.search("^https?://[^/]+", project_url).group(0)
+    if gitlab_url == os.environ["CI_PROJECT_URL"]:
+        gitlab_url = re.search("^https?://[^/]+", gitlab_url).group(0)
+
     gl = gitlab.Gitlab(gitlab_url, private_token=private_token)
     try:
         project = gl.projects.get(project_id)

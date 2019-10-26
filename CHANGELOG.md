@@ -7,9 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2019-10-26
+### Changed
+- Updated README.rst, to include more useful information, about predefined variables.
+
+### Fixed
+- Tool only worked on GitLabs urls that were subdomains, now will work on any just specify gitlab-url.
+
+### Removed
+- Repeated sections from README.rst.
+
 ## [1.0.1] - 2019-07-30
 ### Changed
-- README to include new short params i.e. -t instead --target. 
+- README.rst to include new short params i.e. -t instead --target. 
 
 ## [1.0.0] - 2019-07-30
 ### Removed

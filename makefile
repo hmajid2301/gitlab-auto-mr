@@ -1,3 +1,8 @@
+.PHONY: virtualenv
+virtualenv:
+	@tox -e dev
+
+
 .PHONY: lint
 lint:
 	@tox -e lint

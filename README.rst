@@ -17,23 +17,20 @@
 GitLab Auto MR
 ==============
 
-This is a simple Python script that allows you create MR in GitLab automatically. It is intended to be used in CI/CD
-as a Docker image. However you can use it as a separate Python library if you would like.
-An example CI using this can be found `here <https://gitlab.com/stegappasaurus/stegappasaurus-app/blob/master/.gitlab-ci.yml>`_.
+This is a simple Python cli script that allows you create MR in GitLab automatically. It is intended to be
+used during your CI/CD. However you can chose to use it however you wish.
 
 It is based on the script and idea of `Riccardo Padovani <https://rpadovani.com>`_,
 which he introduced with his blog post
 `How to automatically create new MR on Gitlab with Gitlab CI <https://rpadovani.com/open-mr-gitlab-ci>`_.
-
-This package was intended to be used by GitLab CI hence using environments provided by the GitLab CI. You can however
-use it as a CLI tool if you would like.
 
 Usage
 -----
 
 First you need to create a personal access token,
 `more information here <https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html>`_.
-With the scope ``api``, so it can create the MR using your API.
+With the scope ``api``, so it can create the MR using your API. This access token is passed
+to the script with the ``--private-token`` argument.
 
 .. code-block:: bash
 
@@ -79,25 +76,49 @@ GitLab CI
 ``GITLAB_PRIVATE_TOKEN`` Set a secret variable in your GitLab project with your private token. Name it
 GITLAB_PRIVATE_TOKEN (``CI/CD > Environment Variables``). This is necessary to raise the Merge Request on your behalf.
 More information `click here <https://docs.gitlab.com/ee/user/profile/personal_access_tokens.html>`_.
-An example CI using this can be `found here <https://gitlab.com/stegappasaurus/stegappasaurus-app/blob/master/.gitlab-ci.yml>`_.
+An example CI using this can be found
+`here <https://gitlab.com/hmajid2301/stegappasaurus/blob/a22b7dc80f86b471d8a2eaa7b7eadb7b492c53c7/.gitlab-ci.yml>`_,
+look for the ``create:merge-request`` job.
 
 Add the following to your ``.gitlab-ci.yml`` file:
 
 .. code-block:: yaml
 
-    stages:
-      - open
+  stages:
+    - open
 
-    open_merge_request:
-      image: registry.gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr
-      before_script: [] # We do not need any setup work, let's remove the global one (if any)
-      variables:
-        GIT_STRATEGY: none # We do not need a clone of the GIT repository to create a Merge Request
-      stage: open
-      only:
-        - /^feature\/*/ # We have a very strict naming convention
-      script:
-        - gitlab_auto_mr
+  open_merge_request:
+    image: registry.gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr
+    before_script: [] # We do not need any setup work, let's remove the global one (if any)
+    variables:
+      GIT_STRATEGY: none # We do not need a clone of the GIT repository to create a Merge Request
+    stage: open
+    script:
+      - gitlab_auto_mr -t master -c WIP -d ./.gitlab/merge_request/merge_request.md -r -s --use-issue-name
+
+
+Predefined Variables
+^^^^^^^^^^^^^^^^^^^^
+
+Please note some of the arguments can be filled in using environment variables defined during GitLab CI.
+For more information `click here <https://docs.gitlab.com/ee/ci/variables/predefined_variables.html>_`.
+
+* If ``--private-token`` is not set the script will look for the ENV variable ``GITLAB_PRIVATE_TOKEN``
+* If ``--source-branch`` is not set the script will look for the ENV variable ``CI_COMMIT_REF_NAME``
+* If ``--project-id`` is not set it will look for for the ENV variable ``CI_PROJECT_ID``
+* If ``--project-url`` is not set it will look for for the ENV variable ``CI_PROJECT_URL``
+* If ``--user-id`` is not set it will look for for the ENV variable ``GITLAB_USER_ID``
+
+
+Development
+===========
+
+.. code-block:: bash
+
+  git clone git@gitlab.com:gitlab-automation-toolkit/gitlab-auto-mr.git
+  cd gitlab-auto-mr
+  pip install tox
+  make virtualenv
 
 Changelog
 =========
