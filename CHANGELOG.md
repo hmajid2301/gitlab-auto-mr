@@ -6,8 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [1.1.3] - 2019-10-26
 ### Changed
 - Used predefined variables in `gitlab-ci`.
+- Removed git strategy doesn't make sense if we're using a merge request file.
 
 ## [1.1.2] - 2019-10-26
 ### Fixed

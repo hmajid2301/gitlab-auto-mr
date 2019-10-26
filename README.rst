@@ -90,8 +90,6 @@ Add the following to your ``.gitlab-ci.yml`` file:
   open_merge_request:
     image: registry.gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr
     before_script: [] # We do not need any setup work, let's remove the global one (if any)
-    variables:
-      GIT_STRATEGY: none # We do not need a clone of the GIT repository to create a Merge Request
     stage: open
     script:
       - gitlab_auto_mr -t master -c WIP -d ./.gitlab/merge_request/merge_request.md -r -s --use-issue-name
@@ -106,7 +104,7 @@ For more information `click here <https://docs.gitlab.com/ee/ci/variables/predef
 * If ``--private-token`` is not set the script will look for the ENV variable ``GITLAB_PRIVATE_TOKEN``
 * If ``--source-branch`` is not set the script will look for the ENV variable ``CI_COMMIT_REF_NAME``
 * If ``--project-id`` is not set it will look for for the ENV variable ``CI_PROJECT_ID``
-* If ``--project-url`` is not set it will look for for the ENV variable ``CI_PROJECT_URL``
+* If ``--gitlab-url`` is not set it will look for for the ENV variable ``CI_PROJECT_URL``
 * If ``--user-id`` is not set it will look for for the ENV variable ``GITLAB_USER_ID``
 
 
