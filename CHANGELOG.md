@@ -7,10 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- unit tests with 100% code coverage.
+- `dev-requirements.txt` for development requirements such as black.
+- `isort` to sort imports.
+- `coverage` to detect code coverage from unit tests.
+- `coverage` job in `.gitlab-ci.yml`.
 - Publish to staging pypi first.
 
 ### Changed
+- `makefile` to `Makefile`.
+- `MANIFEST.in` with recommended changes from `check-manifest`.
+- `README.rst` added a coverage badge.
+- `code-formatter` name in `tox.ini` to.
+- `docker` publish job to pre-publish only on release tags.
 - Update README.rst, setup development environment env.
+
+### Removed
+- `docs` folder.
 
 ## [1.1.3] - 2019-10-26
 ### Changed
@@ -162,3 +175,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.1.0] - 2019-03-16
 ### Added
   - Initial Release.
+
+[Unreleased]: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-release/-/compare/release%2F1.1.3...master
+[1.1.3]: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/-/compare/release%2F1.1.2...release%2F1.1.3
+[1.1.2]: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/-/compare/release%2F1.1.1...release%2F1.1.2
+[1.1.1]: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/-/compare/release%2F1.1.0...release%2F1.1.1
+[1.1.0]: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/-/compare/release%2F1.0.1...release%2F1.1.0
+[1.0.1]: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/-/compare/release%2F1.0.0...release%2F1.0.1
+[1.0.0]: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/-/compare/release%2F0.6.1...release%2F1.0.0
+[0.6.1]: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/-/compare/release%2F0.6.0...release%2F0.6.1
+[0.6.0]: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/-/compare/release%2F0.5.2...release%2F0.6.0
+[0.5.2]: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/-/compare/release%2F0.5.1...release%2F0.5.2
+[0.5.1]: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/-/compare/release%2F0.5.0...release%2F0.5.1
+[0.5.0]: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/-/compare/release%2F0.4.1...release%2F0.5.0
+[0.4.1]: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/-/compare/release%2F0.4.0...release%2F0.4.1
+[0.4.0]: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/-/compare/release%2F0.3.1...release%2F0.4.0
+[0.3.1]: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/-/compare/release%2F0.3.0...release%2F0.3.1
+[0.3.0]: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/-/compare/release%2F0.2.7...release%2F0.3.0
+[0.2.7]: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/-/compare/release%2F0.2.6...release%2F0.2.7
+[0.2.6]: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/-/compare/release%2F0.2.5...release%2F0.2.6
+[0.2.5]: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/-/compare/release%2F0.2.4...release%2F0.2.5
+[0.2.4]: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/-/compare/release%2F0.2.3...release%2F0.2.4
+[0.2.3]: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/-/compare/release%2F0.2.2post1...release%2F0.2.3
+[0.2.2post1]: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/-/compare/release%2F0.2.2...release%2F0.2.2post1
+[0.2.2]: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/-/compare/release%2F0.2.1...release%2F0.2.2
+[0.2.1]: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/-/compare/release%2F0.2.0...release%2F0.2.1
+[0.2.0]: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/-/compare/release%2F0.1.4...release%2F0.2.0
+[0.1.4]: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/-/compare/release%2F0.1.3...release%2F0.1.4
+[0.1.3]: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/-/compare/release%2F0.1.2...release%2F0.1.3
+[0.1.2]: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/-/compare/release%2F0.1.0...release%2F0.1.2
+[0.1.0]: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr-issue/-/tags/release%2F0.1.

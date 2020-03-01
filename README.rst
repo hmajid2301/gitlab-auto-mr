@@ -2,6 +2,10 @@
    :target: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr
    :alt: Pipeline Status
 
+.. image:: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr/badges/master/coverage.svg
+   :target: https://gitlab.com/gitlab-automation-toolkit/gitlab-auto-mr
+   :alt: Coverage
+
 .. image:: https://img.shields.io/pypi/l/gitlab-auto-mr.svg
    :target: https://pypi.org/project/gitlab-auto-mr/
    :alt: PyPI Project License
@@ -9,10 +13,6 @@
 .. image:: https://img.shields.io/pypi/v/gitlab-auto-mr.svg
    :target: https://pypi.org/project/gitlab-auto-mr/
    :alt: PyPI Project Version
-
-.. image:: https://readthedocs.org/projects/gitlab-auto-mr/badge/?version=latest
-   :target: https://gitlab-auto-mr.readthedocs.io/en/latest/?badge=latest
-   :alt: Documentation Status
 
 GitLab Auto MR
 ==============
@@ -116,7 +116,8 @@ Setup Development Environment
   git clone git@gitlab.com:gitlab-automation-toolkit/gitlab-auto-mr.git
   cd gitlab-auto-mr
   pip install tox
-  make virtualenv
+  make install-venv
+  source .venv/bin/activate
   make install-dev
 
 Changelog

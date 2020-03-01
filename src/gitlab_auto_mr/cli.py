@@ -27,6 +27,7 @@ import sys
 
 import click
 import gitlab
+import requests
 
 
 @click.command()
@@ -54,20 +55,18 @@ import gitlab
 )
 @click.option("--target-branch", "-t", help="The target branch to merge onto.")
 @click.option("--commit-prefix", "-c", default="WIP", help="Prefix for the MR title i.e. WIP.")
-@click.option(
-    "--remove-branch", "-r", is_flag=True, help="Set to True if you want the source branch to be removed after MR."
-)
-@click.option("--squash-commits", "-s", is_flag=True, help="Set to True if you want commits to be squashed.")
+@click.option("--remove-branch", "-r", is_flag=True, help="If set will remove the source branch after MR.")
+@click.option("--squash-commits", "-s", is_flag=True, help="If set will squash commits on merge.")
 @click.option("--description", "-d", type=str, help="Path to file to use as the description for the MR.")
 @click.option(
     "--use-issue-name",
     is_flag=True,
-    help="If set to True will use information from issue in branch name, must be in the form #issue-number, i.e feature/#6.",
+    help="If set will use information from issue in branch name, must be in the form #issue-number, i.e feature/#6.",
 )
 @click.option(
     "--allow-collaboration",
     is_flag=True,
-    help="If set to True allow, commits from members who can merge to the target branch.",
+    help="If set allow, commits from members who can merge to the target branch.",
 )
 def cli(
     private_token,
@@ -84,14 +83,20 @@ def cli(
     allow_collaboration,
 ):
     """Gitlab Auto MR Tool."""
-    if gitlab_url == os.environ["CI_PROJECT_URL"]:
+    if "CI_PROJECT_URL" in os.environ and gitlab_url == os.environ["CI_PROJECT_URL"]:
         gitlab_url = re.search("^https?://[^/]+", gitlab_url).group(0)
 
     gl = gitlab.Gitlab(gitlab_url, private_token=private_token)
     try:
         project = gl.projects.get(project_id)
-    except gitlab.exceptions.GitlabGetError as e:
-        print(f"Unable to get project {project_id}. Error: {e}.")
+    except gitlab.exceptions.GitlabAuthenticationError:
+        print(f"Unable to get project {project_id}. Unauthorised access, check your access token is valid.")
+        sys.exit(1)
+    except gitlab.exceptions.GitlabGetError:
+        print(f"Unable to get project {project_id}.")
+        sys.exit(1)
+    except requests.exceptions.MissingSchema:
+        print(f"Incorrect --gitlab-url, missing schema i.e. https:// {gitlab_url}.")
         sys.exit(1)
 
     if not target_branch:
@@ -228,6 +233,6 @@ def get_issue_data(project, source_branch, use_issue_name):
         except gitlab.exceptions.GitlabGetError as e:
             print(f"Issue {issue} not found, {e}.")
         except (IndexError, AttributeError, TypeError):
-            print(f"Issue Number not found in branch name {source_branch}")
+            print(f"Issue Number not found in {source_branch}")
 
     return data
